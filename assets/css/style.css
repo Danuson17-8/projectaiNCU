@@ -627,8 +627,8 @@ table.data-table {
    itself positioned — still paints above it. */
 .bg-lottie {
   position: fixed;
-  right: -20px;
-  bottom: -20px;
+  right: 30px;
+  bottom: 25px;
   width: 300px;
   height: 300px;
   z-index: -1;

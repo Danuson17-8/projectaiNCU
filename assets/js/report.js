@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js';
+import { requireSession } from './authGuard.js';
 import { statusLabel, statusBadgeClass, formatDateTime } from './statusUtils.js';
 
 const chatLog = document.getElementById('chat-log');
@@ -44,7 +45,7 @@ function hideInputRow() {
   chatInputRow.hidden = true;
 }
 
-async function runSystemMode(slug) {
+async function runSystemMode(slug, userId) {
   const { data: system, error } = await supabase
     .from('systems')
     .select('id,name,slug,description')
@@ -72,23 +73,24 @@ async function runSystemMode(slug) {
 
     if (!ticketCreated) {
       chatSendBtn.disabled = true;
-      const ticketId = crypto.randomUUID();
-      const { error: insertError } = await supabase
+      const { data: ticket, error: insertError } = await supabase
         .from('tickets')
-        .insert({ id: ticketId, system_id: system.id, message: text });
+        .insert({ system_id: system.id, reporter_id: userId, message: text })
+        .select()
+        .single();
       chatSendBtn.disabled = false;
 
-      if (insertError) {
+      if (insertError || !ticket) {
         appendRow('bot', 'ขออภัยครับ เกิดข้อผิดพลาดในการบันทึก กรุณาลองส่งข้อความอีกครั้ง');
         console.error(insertError);
         return;
       }
 
       ticketCreated = true;
-      showStatusPanel(ticketId, 'pending');
+      showStatusPanel(ticket.id, ticket.status);
       appendRow(
         'bot',
-        `รับทราบครับ เก็บข้อมูลที่แจ้งไว้แล้ว ทีมงานจะตรวจสอบและอัปเดตสถานะให้ทราบครับ (สถานะปัจจุบัน: ${statusLabel('pending')}) — จดหมายเลข ticket ด้านบนไว้เพื่อติดตามสถานะภายหลังได้ครับ`
+        `รับทราบครับ เก็บข้อมูลที่แจ้งไว้แล้ว ทีมงานจะตรวจสอบและอัปเดตสถานะให้ทราบครับ (สถานะปัจจุบัน: ${statusLabel(ticket.status)}) — ดู ticket นี้ได้ทุกเมื่อจากหน้า "ปัญหาที่เคยแจ้ง" ครับ`
       );
     } else {
       appendRow('bot', CANNED_DECLINE);
@@ -104,15 +106,19 @@ async function runSystemMode(slug) {
 async function runTrackMode(ticketId) {
   hideInputRow();
 
-  const { data, error } = await supabase.rpc('track_ticket', { ticket_id: ticketId });
-  const row = Array.isArray(data) ? data[0] : data;
+  const { data: row, error } = await supabase
+    .from('tickets')
+    .select('id, message, status, created_at, systems(name)')
+    .eq('id', ticketId)
+    .single();
 
   if (error || !row) {
-    appendRow('bot', 'ไม่พบหมายเลข ticket นี้ กรุณาตรวจสอบหมายเลขอีกครั้ง หรือกลับไปแจ้งปัญหาใหม่');
+    appendRow('bot', 'ไม่พบ ticket นี้ หรือคุณไม่มีสิทธิ์ดูรายการนี้');
     return;
   }
 
-  topbarTitle.textContent = `ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย / ${row.system_name}`;
+  const systemName = row.systems ? row.systems.name : '';
+  topbarTitle.textContent = `ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย / ${systemName}`;
   showStatusPanel(row.id, row.status);
   appendRow('user', row.message);
   appendRow(
@@ -121,13 +127,16 @@ async function runTrackMode(ticketId) {
   );
 }
 
-function init() {
+async function init() {
+  const session = await requireSession('login.html');
+  if (!session) return;
+
   const params = new URLSearchParams(window.location.search);
   const slug = params.get('system');
   const ticketId = params.get('ticket');
 
   if (slug) {
-    runSystemMode(slug);
+    runSystemMode(slug, session.user.id);
   } else if (ticketId) {
     runTrackMode(ticketId);
   } else {

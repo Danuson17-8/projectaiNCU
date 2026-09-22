@@ -16,7 +16,9 @@
       <span class="wordmark">ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย</span>
     </div>
     <div class="topbar-right">
-      <a class="topbar-link" href="admin/login.html">สำหรับแอดมิน →</a>
+      <a class="topbar-link" href="my-tickets.html">ปัญหาที่เคยแจ้ง</a>
+      <span class="text-faint" id="user-email" style="font-size: 12.5px;"></span>
+      <button class="btn btn-secondary" id="logout-btn" style="padding: 6px 12px; font-size: 12px;">ออกจากระบบ</button>
     </div>
   </div>
 
@@ -30,17 +32,6 @@
 
       <div id="systems-grid" class="systems-grid">
         <p class="text-faint" id="systems-loading">กำลังโหลดรายการระบบ...</p>
-      </div>
-
-      <div class="card" style="max-width: 480px; margin: 8px auto 0;">
-        <form id="track-form" class="stack" style="gap: 10px;">
-          <div class="field">
-            <label for="track-ticket-id">ติดตามปัญหาที่เคยแจ้ง (ใส่หมายเลข Ticket ID)</label>
-            <input type="text" id="track-ticket-id" placeholder="เช่น 8f2c1a90-....">
-          </div>
-          <button type="submit" class="btn btn-secondary">ติดตามสถานะ</button>
-          <p class="field-error" id="track-error"></p>
-        </form>
       </div>
 
     </div>

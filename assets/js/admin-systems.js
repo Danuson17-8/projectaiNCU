@@ -1,5 +1,5 @@
 import { supabase } from './supabaseClient.js';
-import { requireSession, wireLogoutButton } from './authGuard.js';
+import { requireAdminSession, wireLogoutButton } from './authGuard.js';
 
 const tbody = document.getElementById('systems-tbody');
 const panel = document.getElementById('system-panel');
@@ -173,7 +173,7 @@ document.getElementById('cancel-panel-btn').addEventListener('click', closePanel
 wireLogoutButton(document.getElementById('logout-btn'));
 
 async function init() {
-  const session = await requireSession();
+  const session = await requireAdminSession();
   if (!session) return;
   loadSystems();
 }

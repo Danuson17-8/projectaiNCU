@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js';
+import { requireSession, wireLogoutButton } from './authGuard.js';
 
 const ICONS = {
   login: '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
@@ -58,22 +59,13 @@ async function loadSystems() {
   data.forEach((system) => grid.appendChild(renderSystemCard(system)));
 }
 
-function wireTrackForm() {
-  const form = document.getElementById('track-form');
-  const input = document.getElementById('track-ticket-id');
-  const errorEl = document.getElementById('track-error');
+wireLogoutButton(document.getElementById('logout-btn'), 'login.html');
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const value = input.value.trim();
-    errorEl.textContent = '';
-    if (!value) {
-      errorEl.textContent = 'กรุณาใส่หมายเลข Ticket ID';
-      return;
-    }
-    window.location.href = `report.html?ticket=${encodeURIComponent(value)}`;
-  });
+async function init() {
+  const session = await requireSession('login.html');
+  if (!session) return;
+  document.getElementById('user-email').textContent = session.user.email || '';
+  loadSystems();
 }
 
-loadSystems();
-wireTrackForm();
+init();

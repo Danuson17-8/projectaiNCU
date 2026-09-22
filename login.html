@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย — เข้าสู่ระบบ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark">NCU</div>
+      <span class="wordmark">ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย</span>
+    </div>
+  </div>
+
+  <div class="center-page">
+    <div class="card stack" style="width: 100%; max-width: 380px; gap: 18px;">
+
+      <div class="stack" style="gap: 4px;">
+        <h1 style="margin: 0; font-size: 18px; font-weight: 700;" id="form-title">เข้าสู่ระบบ</h1>
+        <p style="margin: 0; font-size: 12.5px;" class="text-muted" id="form-subtitle">เข้าสู่ระบบเพื่อแจ้งปัญหาและติดตามสถานะที่เคยแจ้งไว้</p>
+      </div>
+
+      <form id="auth-form" class="stack" style="gap: 14px;">
+        <div class="field">
+          <label for="email">อีเมล</label>
+          <input type="email" id="email" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="password">รหัสผ่าน</label>
+          <input type="password" id="password" autocomplete="current-password" required minlength="6">
+        </div>
+        <p class="field-error" id="auth-error"></p>
+        <p style="margin: 0; font-size: 12.5px; color: #1F6E3D; display: none;" id="auth-success"></p>
+        <button type="submit" class="btn btn-primary" id="submit-btn" style="width: 100%;">เข้าสู่ระบบ</button>
+      </form>
+
+      <p style="margin: 0; font-size: 12.5px; text-align: center;" class="text-muted">
+        <span id="toggle-prompt">ยังไม่มีบัญชี?</span>
+        <button type="button" id="toggle-mode-btn" style="background: none; border: none; padding: 0; color: #0F6C61; font-weight: 600; font-size: 12.5px; font-family: inherit; text-decoration: underline;">สมัครสมาชิก</button>
+      </p>
+
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="assets/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Issue Desk — แจ้งปัญหาการใช้งาน</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+      </div>
+      <span class="wordmark">Issue Desk</span>
+    </div>
+    <div class="topbar-right">
+      <a class="topbar-link" href="admin/login.html">สำหรับแอดมิน →</a>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 56px 24px;">
+    <div style="width: 100%; max-width: 780px;" class="stack">
+
+      <div class="stack" style="gap: 8px; text-align: center;">
+        <h1 style="margin: 0; font-size: 26px; font-weight: 700;">แจ้งปัญหาการใช้งาน</h1>
+        <p style="margin: 0; font-size: 14px;" class="text-muted">เลือกระบบที่คุณพบปัญหา เพื่อเริ่มแจ้งปัญหา</p>
+      </div>
+
+      <div id="systems-grid" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;">
+        <p class="text-faint" id="systems-loading">กำลังโหลดรายการระบบ...</p>
+      </div>
+
+      <div class="card" style="max-width: 480px; margin: 8px auto 0;">
+        <form id="track-form" class="stack" style="gap: 10px;">
+          <div class="field">
+            <label for="track-ticket-id">ติดตามปัญหาที่เคยแจ้ง (ใส่หมายเลข Ticket ID)</label>
+            <input type="text" id="track-ticket-id" placeholder="เช่น 8f2c1a90-....">
+          </div>
+          <button type="submit" class="btn btn-secondary">ติดตามสถานะ</button>
+          <p class="field-error" id="track-error"></p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="assets/js/index.js"></script>
+</body>
+</html>

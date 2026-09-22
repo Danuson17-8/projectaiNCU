@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Issue Desk — Admin — จัดการระบบ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar topbar-admin">
+    <div class="topbar-left">
+      <div class="logo-mark">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+      </div>
+      <span class="wordmark">Issue Desk</span>
+      <span class="pill pill-dark">Admin</span>
+    </div>
+    <div class="topbar-right">
+      <a class="topbar-link" href="../index.html">← มุมมอง user</a>
+      <button class="btn btn-secondary" id="logout-btn" style="padding: 6px 12px; font-size: 12px;">ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+
+    <div class="admin-nav">
+      <a class="admin-nav-item active" href="systems.html">Systems</a>
+      <a class="admin-nav-item" href="tickets.html">Tickets</a>
+    </div>
+
+    <div class="admin-main">
+      <div class="row-between">
+        <div>
+          <h1 style="margin: 0; font-size: 19px; font-weight: 700;">ระบบทั้งหมด</h1>
+          <p style="margin: 4px 0 0; font-size: 12.5px;" class="text-faint">รายการระบบที่แสดงให้ user เลือกตอนแจ้งปัญหา</p>
+        </div>
+        <button class="btn btn-primary" id="add-system-btn">+ เพิ่มระบบใหม่</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ระบบ</th>
+              <th>Slug</th>
+              <th>สถานะ</th>
+              <th>จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="systems-tbody">
+            <tr><td colspan="4" class="text-faint">กำลังโหลด...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="system-panel" hidden>
+      <div>
+        <h2 style="margin: 0; font-size: 15px; font-weight: 700;" id="panel-title">เพิ่มระบบใหม่</h2>
+        <p style="margin: 4px 0 0; font-size: 12px; line-height: 1.5;" class="text-faint">ระบบนี้จะไปแสดงในหน้าที่ user เลือกก่อนแจ้งปัญหาทันที (ถ้าเปิดใช้งาน)</p>
+      </div>
+
+      <form id="system-form" class="stack" style="gap: 16px;">
+        <input type="hidden" id="sys-id">
+
+        <div class="field">
+          <label for="sys-name">ชื่อระบบ</label>
+          <input type="text" id="sys-name" placeholder="เช่น ระบบแจ้งเตือน SMS" required>
+        </div>
+
+        <div class="field">
+          <label for="sys-slug">รหัสระบบ (slug)</label>
+          <input type="text" id="sys-slug" class="mono" placeholder="sms-notify" required pattern="[a-z0-9-]+">
+        </div>
+
+        <div class="field">
+          <label for="sys-desc">คำอธิบายสั้น ๆ</label>
+          <textarea id="sys-desc" rows="2" placeholder="ใช้แสดงใต้ชื่อระบบในหน้าเลือกระบบของ user"></textarea>
+        </div>
+
+        <fieldset style="border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+          <legend style="font-size: 11.5px; font-weight: 600; padding: 0; margin-bottom: 2px;" class="text-muted">สีไอคอน</legend>
+          <div class="row" style="gap: 10px;">
+            <input type="radio" name="sys-color" class="swatch" value="#0F6C61" checked aria-label="เขียวอมฟ้า" style="background: #0F6C61; color: #0F6C61;">
+            <input type="radio" name="sys-color" class="swatch" value="#2563EB" aria-label="น้ำเงิน" style="background: #2563EB; color: #2563EB;">
+            <input type="radio" name="sys-color" class="swatch" value="#7C3AED" aria-label="ม่วง" style="background: #7C3AED; color: #7C3AED;">
+            <input type="radio" name="sys-color" class="swatch" value="#D97757" aria-label="ส้ม" style="background: #D97757; color: #D97757;">
+            <input type="radio" name="sys-color" class="swatch" value="#B3311C" aria-label="แดง" style="background: #B3311C; color: #B3311C;">
+          </div>
+        </fieldset>
+
+        <label class="row" style="gap: 8px;">
+          <input type="checkbox" id="sys-active" class="toggle" checked aria-label="เปิดใช้งานระบบนี้">
+          <span style="font-size: 13px;">เปิดใช้งาน (แสดงให้ user เลือก)</span>
+        </label>
+
+        <p class="field-error" id="system-form-error"></p>
+
+        <div class="row" style="gap: 10px; margin-top: 4px;">
+          <button type="button" class="btn btn-secondary" id="cancel-panel-btn" style="flex-grow: 1;">ยกเลิก</button>
+          <button type="submit" class="btn btn-primary" style="flex-grow: 1;">บันทึกระบบ</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script type="module" src="../assets/js/admin-systems.js"></script>
+</body>
+</html>

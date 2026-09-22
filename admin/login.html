@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Issue Desk — Admin Login</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+      </div>
+      <span class="wordmark">Issue Desk</span>
+      <span class="pill pill-accent">Admin</span>
+    </div>
+    <div class="topbar-right">
+      <a class="topbar-link" href="../index.html">← กลับหน้าแจ้งปัญหา</a>
+    </div>
+  </div>
+
+  <div class="center-page">
+    <div class="card stack" style="width: 100%; max-width: 360px; gap: 18px;">
+      <div class="stack" style="gap: 4px;">
+        <h1 style="margin: 0; font-size: 18px; font-weight: 700;">เข้าสู่ระบบแอดมิน</h1>
+        <p style="margin: 0; font-size: 12.5px;" class="text-muted">สำหรับผู้ดูแลระบบเท่านั้น</p>
+      </div>
+
+      <form id="login-form" class="stack" style="gap: 14px;">
+        <div class="field">
+          <label for="email">อีเมล</label>
+          <input type="email" id="email" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="password">รหัสผ่าน</label>
+          <input type="password" id="password" autocomplete="current-password" required>
+        </div>
+        <p class="field-error" id="login-error"></p>
+        <button type="submit" class="btn btn-primary" id="login-btn" style="width: 100%;">เข้าสู่ระบบ</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="../assets/js/admin-login.js"></script>
+</body>
+</html>

@@ -72,24 +72,23 @@ async function runSystemMode(slug) {
 
     if (!ticketCreated) {
       chatSendBtn.disabled = true;
-      const { data: ticket, error: insertError } = await supabase
+      const ticketId = crypto.randomUUID();
+      const { error: insertError } = await supabase
         .from('tickets')
-        .insert({ system_id: system.id, message: text })
-        .select()
-        .single();
+        .insert({ id: ticketId, system_id: system.id, message: text });
       chatSendBtn.disabled = false;
 
-      if (insertError || !ticket) {
+      if (insertError) {
         appendRow('bot', 'ขออภัยครับ เกิดข้อผิดพลาดในการบันทึก กรุณาลองส่งข้อความอีกครั้ง');
         console.error(insertError);
         return;
       }
 
       ticketCreated = true;
-      showStatusPanel(ticket.id, ticket.status);
+      showStatusPanel(ticketId, 'pending');
       appendRow(
         'bot',
-        `รับทราบครับ เก็บข้อมูลที่แจ้งไว้แล้ว ทีมงานจะตรวจสอบและอัปเดตสถานะให้ทราบครับ (สถานะปัจจุบัน: ${statusLabel(ticket.status)}) — จดหมายเลข ticket ด้านบนไว้เพื่อติดตามสถานะภายหลังได้ครับ`
+        `รับทราบครับ เก็บข้อมูลที่แจ้งไว้แล้ว ทีมงานจะตรวจสอบและอัปเดตสถานะให้ทราบครับ (สถานะปัจจุบัน: ${statusLabel('pending')}) — จดหมายเลข ticket ด้านบนไว้เพื่อติดตามสถานะภายหลังได้ครับ`
       );
     } else {
       appendRow('bot', CANNED_DECLINE);

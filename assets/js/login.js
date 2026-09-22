@@ -3,6 +3,8 @@ import { supabase } from './supabaseClient.js';
 const form = document.getElementById('auth-form');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
+const confirmPasswordField = document.getElementById('confirm-password-field');
+const confirmPasswordInput = document.getElementById('confirm-password');
 const errorEl = document.getElementById('auth-error');
 const successEl = document.getElementById('auth-success');
 const submitBtn = document.getElementById('submit-btn');
@@ -22,12 +24,17 @@ function applyMode() {
     submitBtn.textContent = 'เข้าสู่ระบบ';
     togglePrompt.textContent = 'ยังไม่มีบัญชี?';
     toggleModeBtn.textContent = 'สมัครสมาชิก';
+    confirmPasswordField.hidden = true;
+    confirmPasswordInput.required = false;
+    confirmPasswordInput.value = '';
   } else {
     formTitle.textContent = 'สมัครสมาชิก';
     formSubtitle.textContent = 'สร้างบัญชีเพื่อเริ่มแจ้งปัญหาการใช้งานระบบ';
     submitBtn.textContent = 'สมัครสมาชิก';
     togglePrompt.textContent = 'มีบัญชีอยู่แล้ว?';
     toggleModeBtn.textContent = 'เข้าสู่ระบบ';
+    confirmPasswordField.hidden = false;
+    confirmPasswordInput.required = true;
   }
 }
 
@@ -61,6 +68,12 @@ form.addEventListener('submit', async (e) => {
     }
     window.location.href = './index.html';
   } else {
+    if (password !== confirmPasswordInput.value) {
+      submitBtn.disabled = false;
+      errorEl.textContent = 'รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน';
+      return;
+    }
+
     const { data, error } = await supabase.auth.signUp({ email, password });
     submitBtn.disabled = false;
     if (error) {

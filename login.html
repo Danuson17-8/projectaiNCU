@@ -34,6 +34,10 @@
           <label for="password">รหัสผ่าน</label>
           <input type="password" id="password" autocomplete="current-password" required minlength="6">
         </div>
+        <div class="field" id="confirm-password-field" hidden>
+          <label for="confirm-password">ยืนยันรหัสผ่าน</label>
+          <input type="password" id="confirm-password" autocomplete="new-password" minlength="6">
+        </div>
         <p class="field-error" id="auth-error"></p>
         <p style="margin: 0; font-size: 12.5px; color: #1F6E3D; display: none;" id="auth-success"></p>
         <button type="submit" class="btn btn-primary" id="submit-btn" style="width: 100%;">เข้าสู่ระบบ</button>

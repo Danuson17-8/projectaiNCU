@@ -30,6 +30,12 @@
   box-sizing: border-box;
 }
 
+/* Any element using the `hidden` attribute must actually hide, even
+   when a class on it also sets `display` (e.g. .field, .admin-panel) */
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -599,10 +605,6 @@ table.data-table {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.admin-panel[hidden] {
-  display: none !important;
 }
 
 /* ===== Utility ===== */

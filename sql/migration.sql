@@ -1,5 +1,5 @@
 -- ============================================================
--- Issue Desk — full migration (tables + RLS + RPC + seed data)
+-- ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย — full migration (tables + RLS + RPC + seed data)
 -- Paste once into Supabase Dashboard → SQL Editor → Run
 -- ============================================================
 

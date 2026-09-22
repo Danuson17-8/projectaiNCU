@@ -58,7 +58,7 @@ async function runSystemMode(slug) {
     return;
   }
 
-  topbarTitle.textContent = `Issue Desk / ${system.name}`;
+  topbarTitle.textContent = `ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย / ${system.name}`;
   appendRow('bot', `รับทราบครับ กรุณาอธิบายปัญหาที่พบเกี่ยวกับ "${system.name}" ได้เลยครับ`);
 
   let ticketCreated = false;
@@ -112,7 +112,7 @@ async function runTrackMode(ticketId) {
     return;
   }
 
-  topbarTitle.textContent = `Issue Desk / ${row.system_name}`;
+  topbarTitle.textContent = `ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย / ${row.system_name}`;
   showStatusPanel(row.id, row.status);
   appendRow('user', row.message);
   appendRow(

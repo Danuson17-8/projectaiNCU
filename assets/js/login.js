@@ -63,7 +63,9 @@ form.addEventListener('submit', async (e) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     submitBtn.disabled = false;
     if (error) {
-      errorEl.textContent = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+      errorEl.textContent = error.message.includes('Email not confirmed')
+        ? 'บัญชีนี้ยังไม่ได้ยืนยันอีเมล กรุณาตรวจสอบกล่องอีเมลแล้วกดลิงก์ยืนยันก่อนเข้าสู่ระบบ'
+        : 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
       return;
     }
     window.location.href = './index.html';

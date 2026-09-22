@@ -80,11 +80,12 @@ on public.systems for delete
 to authenticated
 using (true);
 
--- tickets: anon may INSERT only, never SELECT directly
+-- tickets: anon (and authenticated, e.g. an admin still signed in on
+-- another tab of the same site) may INSERT only, never SELECT directly
 drop policy if exists "tickets_public_insert" on public.tickets;
 create policy "tickets_public_insert"
 on public.tickets for insert
-to anon
+to anon, authenticated
 with check (true);
 
 -- tickets: admin (authenticated) full read + status update

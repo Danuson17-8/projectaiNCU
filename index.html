@@ -16,7 +16,6 @@
       <span class="wordmark">ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย</span>
     </div>
     <div class="topbar-right">
-      <a class="topbar-link" href="my-tickets.html">ปัญหาที่เคยแจ้ง</a>
       <span class="text-faint" id="user-email" style="font-size: 12.5px;"></span>
       <button class="btn btn-secondary" id="logout-btn" style="padding: 6px 12px; font-size: 12px;">ออกจากระบบ</button>
     </div>
@@ -25,13 +24,22 @@
   <div style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 56px 24px;">
     <div style="width: 100%; max-width: 780px;" class="stack">
 
-      <div class="stack" style="gap: 8px; text-align: center;">
-        <h1 style="margin: 0; font-size: 26px; font-weight: 700;">แจ้งปัญหาการใช้งาน</h1>
-        <p style="margin: 0; font-size: 14px;" class="text-muted">เลือกระบบที่คุณพบปัญหา เพื่อเริ่มแจ้งปัญหา</p>
+      <div class="stack" style="gap: 16px; align-items: center;">
+        <div class="tab-switch" role="tablist">
+          <button type="button" class="tab-btn" id="tab-report" role="tab" aria-selected="true" data-active="true">แจ้งปัญหาใหม่</button>
+          <button type="button" class="tab-btn" id="tab-history" role="tab" aria-selected="false">ประวัติการแจ้ง</button>
+        </div>
+        <p style="margin: 0; font-size: 14px; text-align: center;" class="text-muted" id="panel-subtitle">เลือกระบบที่คุณพบปัญหา เพื่อเริ่มแจ้งปัญหา</p>
       </div>
 
-      <div id="systems-grid" class="systems-grid">
-        <p class="text-faint" id="systems-loading">กำลังโหลดรายการระบบ...</p>
+      <div id="panel-report">
+        <div id="systems-grid" class="systems-grid">
+          <p class="text-faint" id="systems-loading">กำลังโหลดรายการระบบ...</p>
+        </div>
+      </div>
+
+      <div id="panel-history" class="stack" style="gap: 10px;" hidden>
+        <p class="text-faint" id="tickets-loading">กำลังโหลด...</p>
       </div>
 
     </div>

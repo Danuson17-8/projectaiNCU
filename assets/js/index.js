@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient.js';
 import { requireSession, wireLogoutButton } from './authGuard.js';
+import { statusLabel, statusBadgeClass, formatDateTime } from './statusUtils.js';
 
 const ICONS = {
   login: '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
@@ -59,13 +60,98 @@ async function loadSystems() {
   data.forEach((system) => grid.appendChild(renderSystemCard(system)));
 }
 
+function truncate(str, max) {
+  if (!str) return '';
+  return str.length > max ? `${str.slice(0, max)}…` : str;
+}
+
+function renderTicketRow(ticket) {
+  const systemName = ticket.systems ? ticket.systems.name : '(ไม่ทราบระบบ)';
+  const a = document.createElement('a');
+  a.className = 'card';
+  a.href = `report.html?ticket=${encodeURIComponent(ticket.id)}`;
+  a.style.cssText = 'display: flex; align-items: center; justify-content: space-between; gap: 16px; text-decoration: none; color: inherit;';
+  a.innerHTML = `
+    <div class="stack" style="gap: 4px; min-width: 0;">
+      <span style="font-size: 13.5px; font-weight: 600;">${escapeHtml(systemName)}</span>
+      <span style="font-size: 12.5px;" class="text-faint">${escapeHtml(truncate(ticket.message, 90))}</span>
+      <span class="mono text-faintest" style="font-size: 11px;">${formatDateTime(ticket.created_at)}</span>
+    </div>
+    <span class="badge ${statusBadgeClass(ticket.status)}" style="flex-shrink: 0;">
+      <span class="badge-dot"></span>${statusLabel(ticket.status)}
+    </span>
+  `;
+  return a;
+}
+
+let ticketsLoaded = false;
+
+async function loadTickets() {
+  if (ticketsLoaded) return;
+  ticketsLoaded = true;
+
+  const listEl = document.getElementById('panel-history');
+  const { data, error } = await supabase
+    .from('tickets')
+    .select('id, message, status, created_at, systems(name)')
+    .order('created_at', { ascending: false });
+
+  listEl.innerHTML = '';
+
+  if (error) {
+    listEl.innerHTML = `<p class="field-error">โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่ภายหลัง</p>`;
+    console.error(error);
+    ticketsLoaded = false;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    listEl.innerHTML = `<p class="text-faint">คุณยังไม่เคยแจ้งปัญหา</p>`;
+    return;
+  }
+
+  data.forEach((ticket) => listEl.appendChild(renderTicketRow(ticket)));
+}
+
+function switchTab(tab) {
+  const tabReport = document.getElementById('tab-report');
+  const tabHistory = document.getElementById('tab-history');
+  const panelReport = document.getElementById('panel-report');
+  const panelHistory = document.getElementById('panel-history');
+  const subtitle = document.getElementById('panel-subtitle');
+
+  const isHistory = tab === 'history';
+
+  tabReport.dataset.active = String(!isHistory);
+  tabReport.setAttribute('aria-selected', String(!isHistory));
+  tabHistory.dataset.active = String(isHistory);
+  tabHistory.setAttribute('aria-selected', String(isHistory));
+
+  panelReport.hidden = isHistory;
+  panelHistory.hidden = !isHistory;
+  subtitle.textContent = isHistory
+    ? 'ปัญหาที่คุณเคยแจ้งไว้ และสถานะล่าสุด'
+    : 'เลือกระบบที่คุณพบปัญหา เพื่อเริ่มแจ้งปัญหา';
+
+  if (isHistory) loadTickets();
+}
+
+function wireTabs() {
+  document.getElementById('tab-report').addEventListener('click', () => switchTab('report'));
+  document.getElementById('tab-history').addEventListener('click', () => switchTab('history'));
+}
+
 wireLogoutButton(document.getElementById('logout-btn'), 'login.html');
+wireTabs();
 
 async function init() {
   const session = await requireSession('login.html');
   if (!session) return;
   document.getElementById('user-email').textContent = session.user.email || '';
   loadSystems();
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('tab') === 'history') switchTab('history');
 }
 
 init();

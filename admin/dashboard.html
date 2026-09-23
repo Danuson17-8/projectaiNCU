@@ -82,22 +82,22 @@
         </article>
       </section>
 
-      <section class="dash-card dash-panel">
-        <div class="dash-panel-head">
-          <div>
-            <h2 class="dash-panel-title">เรื่องที่แจ้งเข้ามา</h2>
-            <p class="dash-panel-sub" id="trend-sub">จำนวนต่อวัน</p>
+      <div class="dash-grid-trend">
+        <section class="dash-card dash-panel">
+          <div class="dash-panel-head">
+            <div>
+              <h2 class="dash-panel-title">เรื่องที่แจ้งเข้ามา</h2>
+              <p class="dash-panel-sub" id="trend-sub">จำนวนต่อวัน</p>
+            </div>
           </div>
-        </div>
-        <div class="dash-line" id="trend-chart" role="img" aria-label="กราฟจำนวนเรื่องที่แจ้งตามช่วงเวลา"></div>
-      </section>
+          <div class="dash-line" id="trend-chart" role="img" aria-label="กราฟจำนวนเรื่องที่แจ้งตามช่วงเวลา"></div>
+        </section>
 
-      <div class="dash-grid-2">
         <section class="dash-card dash-panel">
           <div class="dash-panel-head">
             <div>
               <h2 class="dash-panel-title">แยกตามระบบ</h2>
-              <p class="dash-panel-sub">จำนวนเรื่องของแต่ละระบบ แบ่งตามสถานะ</p>
+              <p class="dash-panel-sub">จำนวนเรื่อง แบ่งตามสถานะ</p>
             </div>
           </div>
           <ul class="dash-legend" aria-label="คำอธิบายสี">
@@ -105,9 +105,11 @@
             <li><span class="dash-dot" style="background: var(--st-progress);"></span>กำลังดำเนินการ</li>
             <li><span class="dash-dot" style="background: var(--st-resolved);"></span>แก้ไขแล้ว</li>
           </ul>
-          <div class="dash-bars" id="system-bars"></div>
+          <div class="dash-bars dash-bars-stacked" id="system-bars"></div>
         </section>
+      </div>
 
+      <div class="dash-grid-2">
         <section class="dash-card dash-panel">
           <div class="dash-panel-head">
             <div>
@@ -117,6 +119,23 @@
             <a class="dash-panel-link" href="tickets.html">ดูทั้งหมด</a>
           </div>
           <ol class="dash-aging" id="aging-list"></ol>
+        </section>
+
+        <section class="dash-card dash-panel">
+          <div class="dash-panel-head">
+            <div>
+              <h2 class="dash-panel-title">เวลาแก้ไขเฉลี่ย</h2>
+              <p class="dash-panel-sub">จากแจ้งเข้ามาจนแก้ไขแล้ว เฉพาะเรื่องที่แจ้งในช่วงที่เลือก</p>
+            </div>
+          </div>
+          <div class="dash-mttr">
+            <p class="dash-mttr-value" id="mttr-value">–</p>
+            <p class="dash-delta" id="mttr-delta"></p>
+            <p class="dash-mttr-meta" id="mttr-meta"></p>
+          </div>
+          <div class="dash-mttr-divider"></div>
+          <p class="dash-mttr-caption">แยกตามระบบ · เรียงจากช้าที่สุด</p>
+          <div class="dash-bars" id="mttr-bars"></div>
         </section>
       </div>
     </main>

@@ -324,6 +324,13 @@ function renderTrend(tickets) {
   trendEl.appendChild(svg);
 }
 
+// Bar length as a share of the track, leaving room for the value label
+// after it so the longest bars are never squeezed to the same length
+const BAR_LABEL_SPACE = "72px";
+function barWidth(ratio) {
+  return `calc((100% - ${BAR_LABEL_SPACE}) * ${ratio})`;
+}
+
 // ---------- by system (stacked bars) ----------
 function renderSystemBars(tickets) {
   const container = document.getElementById("system-bars");
@@ -364,7 +371,7 @@ function renderSystemBars(tickets) {
     el.innerHTML = `
       <span class="dash-bar-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span>
       <div class="dash-bar-track">
-        <div class="dash-bar" style="width: ${maxTotal ? (row.total / maxTotal) * 100 : 0}%;"></div>
+        <div class="dash-bar" style="width: ${barWidth(maxTotal ? row.total / maxTotal : 0)};"></div>
         <span class="dash-bar-value">${fmt(row.total)}</span>
       </div>
     `;
@@ -389,6 +396,109 @@ function renderSystemBars(tickets) {
       bar.appendChild(seg);
     });
     container.appendChild(el);
+  });
+}
+
+// ---------- average resolution time ----------
+// Approximation: updated_at of a resolved ticket is taken as the moment it
+// was resolved (there is no resolved_at column).
+function resolveHours(t) {
+  return (new Date(t.updated_at) - new Date(t.created_at)) / 3600000;
+}
+
+function formatDuration(hours) {
+  if (hours < 24) return `${fmt(Math.max(1, Math.round(hours)))} ชม.`;
+  return `${(hours / 24).toLocaleString("th-TH", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} วัน`;
+}
+
+function average(values) {
+  return values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+}
+
+function median(values) {
+  if (!values.length) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+function renderResolution(tickets) {
+  const resolved = tickets.filter((t) => t.status === "resolved" && t.updated_at);
+  const hours = resolved.map(resolveHours);
+  const valueEl = document.getElementById("mttr-value");
+  const deltaEl = document.getElementById("mttr-delta");
+  const metaEl = document.getElementById("mttr-meta");
+  const barsEl = document.getElementById("mttr-bars");
+
+  if (!resolved.length) {
+    valueEl.textContent = "–";
+    deltaEl.textContent = "";
+    metaEl.textContent = "ยังไม่มีเรื่องที่แก้ไขแล้วในช่วงนี้";
+    barsEl.innerHTML = "";
+    return;
+  }
+
+  const avg = average(hours);
+  valueEl.textContent = formatDuration(avg);
+  metaEl.textContent = `มัธยฐาน ${formatDuration(median(hours))} · จาก ${fmt(resolved.length)} เรื่อง`;
+
+  // Compare with the previous period of the same length (faster = good)
+  deltaEl.textContent = "";
+  deltaEl.dataset.good = "";
+  if (rangeDays) {
+    const start = rangeStart(rangeDays).getTime();
+    const prevStart = start - rangeDays * DAY_MS;
+    const prevHours = allTickets
+      .filter((t) => {
+        const ts = new Date(t.created_at).getTime();
+        return t.status === "resolved" && t.updated_at && ts >= prevStart && ts < start;
+      })
+      .map(resolveHours);
+    if (prevHours.length) {
+      const prevAvg = average(prevHours);
+      const change = Math.round(((avg - prevAvg) / prevAvg) * 100);
+      if (change === 0) {
+        deltaEl.textContent = `→ เท่าเดิมเทียบกับ ${rangeDays} วันก่อนหน้า`;
+      } else {
+        const faster = change < 0;
+        deltaEl.textContent = `${faster ? "↓ เร็วขึ้น" : "↑ ช้าลง"} ${Math.abs(change)}% เทียบกับ ${rangeDays} วันก่อนหน้า`;
+        deltaEl.dataset.good = String(faster);
+      }
+    }
+  }
+
+  // Per-system average, slowest first
+  const bySystem = new Map();
+  resolved.forEach((t, i) => {
+    const name = t.systems?.name || "(ไม่ทราบระบบ)";
+    if (!bySystem.has(t.system_id)) bySystem.set(t.system_id, { name, hours: [] });
+    bySystem.get(t.system_id).hours.push(hours[i]);
+  });
+  const rows = [...bySystem.values()]
+    .map((r) => ({ name: r.name, avg: average(r.hours), count: r.hours.length }))
+    .sort((a, b) => b.avg - a.avg);
+  const maxAvg = Math.max(...rows.map((r) => r.avg));
+
+  barsEl.innerHTML = "";
+  rows.forEach((row) => {
+    const el = document.createElement("div");
+    el.className = "dash-bar-row";
+    el.innerHTML = `
+      <span class="dash-bar-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span>
+      <div class="dash-bar-track">
+        <div class="dash-bar dash-bar-single" style="width: ${barWidth(row.avg / maxAvg)};"></div>
+        <span class="dash-bar-value">${formatDuration(row.avg)}</span>
+      </div>
+    `;
+    const html =
+      `<span class="dash-tt-muted">${escapeHtml(row.name)}</span>` +
+      `<strong>เฉลี่ย ${formatDuration(row.avg)}</strong>` +
+      `<span class="dash-tt-muted">จาก ${fmt(row.count)} เรื่องที่แก้ไขแล้ว</span>`;
+    const bar = el.querySelector(".dash-bar");
+    bar.addEventListener("pointermove", (e) => showTooltip(html, e.clientX, e.clientY));
+    bar.addEventListener("pointerdown", (e) => showTooltip(html, e.clientX, e.clientY));
+    bar.addEventListener("pointerleave", hideTooltip);
+    barsEl.appendChild(el);
   });
 }
 
@@ -432,6 +542,7 @@ function renderRange() {
   renderKpis(tickets);
   renderTrend(tickets);
   renderSystemBars(tickets);
+  renderResolution(tickets);
 }
 
 function wireRange() {
@@ -449,7 +560,9 @@ async function loadData() {
   const [ticketsRes, systemsRes] = await Promise.all([
     supabase
       .from("tickets")
-      .select("id, message, status, created_at, system_id, systems(name)"),
+      .select(
+        "id, message, status, created_at, updated_at, system_id, systems(name)",
+      ),
     supabase
       .from("systems")
       .select("id, name, is_active")

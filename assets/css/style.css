@@ -38,19 +38,23 @@
 
 body {
   margin: 0;
-  /* Pink layered waves pinned to the bottom of the viewport; the SVG's
-     top is transparent so --bg shows through above the waves */
-  background: var(--bg) url("../images/layered-waves-haikei%20(1).svg") center bottom -40px / 100% auto no-repeat fixed;
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-ui);
   font-size: 14px;
   line-height: 1.5;
 }
 
+/* Pink layered waves pinned to the bottom of the viewport (index.html
+   only); the SVG's top is transparent so --bg shows through above them */
+body.bg-waves {
+  background: var(--bg) url("../images/layered-waves-haikei%20(1).svg") center bottom -40px / 100% auto no-repeat fixed;
+}
+
 /* Phones: size the waves by viewport height (sides get cropped) so they
    rise well above the bottom edge instead of shrinking to a thin strip */
 @media (max-width: 560px) {
-  body {
+  body.bg-waves {
     background-position: 25% bottom;
     background-size: auto 110vh;
   }

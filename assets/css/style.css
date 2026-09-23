@@ -106,6 +106,26 @@ input, textarea, select {
   gap: 16px;
 }
 
+.topbar-left,
+.topbar-right {
+  min-width: 0;
+}
+
+/* Long emails are cut with "…"; the full address shows on hover (title) */
+.user-email {
+  font-size: 12.5px;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .user-email {
+    max-width: 110px;
+  }
+}
+
 .logo-mark {
   width: 28px;
   height: 28px;

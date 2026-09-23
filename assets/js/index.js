@@ -147,7 +147,9 @@ wireTabs();
 async function init() {
   const session = await requireSession('login.html');
   if (!session) return;
-  document.getElementById('user-email').textContent = session.user.email || '';
+  const userEmailEl = document.getElementById('user-email');
+  userEmailEl.textContent = session.user.email || '';
+  userEmailEl.title = session.user.email || '';
   loadSystems();
 
   const params = new URLSearchParams(window.location.search);

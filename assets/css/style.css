@@ -257,6 +257,18 @@ input, textarea, select {
   background: var(--surface);
 }
 
+.btn-logout {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.btn-logout:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -650,7 +662,8 @@ table.data-table {
 
 .sidebar-footer {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
   padding: 12px 6px 0;
   border-top: 1px solid var(--admin-surface);
@@ -704,9 +717,6 @@ table.data-table {
     flex-direction: row;
   }
   .sidebar-footer {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
     padding: 10px 0 0;
   }
   .admin-panel {

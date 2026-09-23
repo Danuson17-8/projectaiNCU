@@ -215,7 +215,7 @@ input, textarea, select {
   border-radius: var(--radius-md);
   background: var(--surface);
   box-shadow: 0 1px 2px rgba(20, 20, 18, 0.04);
-  font-size: 21px; /* 12.5px enlarged by 70% */
+  font-size: 12.5px;
   font-weight: 600;
   white-space: nowrap;
   text-decoration: none;
@@ -229,8 +229,6 @@ input, textarea, select {
 }
 
 .topbar-link svg {
-  width: 20px;
-  height: 20px;
   flex-shrink: 0;
   color: var(--text-muted);
 }

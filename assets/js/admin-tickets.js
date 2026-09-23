@@ -1,5 +1,5 @@
 import { supabase } from './supabaseClient.js';
-import { requireAdminSession, wireLogoutButton } from './authGuard.js';
+import { requireAdminSession, showSidebarUser, wireLogoutButton } from './authGuard.js';
 import { formatDateTime } from './statusUtils.js';
 
 const tbody = document.getElementById('tickets-tbody');
@@ -92,6 +92,7 @@ wireLogoutButton(document.getElementById('logout-btn'));
 async function init() {
   const session = await requireAdminSession();
   if (!session) return;
+  showSidebarUser(session);
   loadTickets();
 }
 

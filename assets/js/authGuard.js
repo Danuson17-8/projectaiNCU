@@ -28,6 +28,14 @@ export async function requireAdminSession(loginPath = './login.html') {
   return session;
 }
 
+// Show the signed-in admin's email in the sidebar footer (full address on hover)
+export function showSidebarUser(session) {
+  const el = document.getElementById('sidebar-user-email');
+  if (!el || !session) return;
+  el.textContent = session.user.email || '';
+  el.title = session.user.email || '';
+}
+
 export async function logout(redirectPath = './login.html') {
   await supabase.auth.signOut();
   window.location.href = redirectPath;

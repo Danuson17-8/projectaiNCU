@@ -1,4 +1,8 @@
-import { requireAdminSession, wireLogoutButton } from "./authGuard.js";
+import {
+  requireAdminSession,
+  showSidebarUser,
+  wireLogoutButton,
+} from "./authGuard.js";
 import { statusBadgeClass, statusLabel } from "./statusUtils.js";
 import { supabase } from "./supabaseClient.js";
 
@@ -481,6 +485,7 @@ wireRange();
 async function init() {
   const session = await requireAdminSession();
   if (!session) return;
+  showSidebarUser(session);
   loadData();
 }
 

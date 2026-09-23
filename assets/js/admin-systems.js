@@ -1,5 +1,5 @@
 import { supabase } from './supabaseClient.js';
-import { requireAdminSession, wireLogoutButton } from './authGuard.js';
+import { requireAdminSession, showSidebarUser, wireLogoutButton } from './authGuard.js';
 
 const tbody = document.getElementById('systems-tbody');
 const panel = document.getElementById('system-panel');
@@ -175,6 +175,7 @@ wireLogoutButton(document.getElementById('logout-btn'));
 async function init() {
   const session = await requireAdminSession();
   if (!session) return;
+  showSidebarUser(session);
   loadSystems();
 }
 

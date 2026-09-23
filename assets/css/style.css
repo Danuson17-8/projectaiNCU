@@ -38,7 +38,9 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  /* Pink layered waves pinned to the bottom of the viewport; the SVG's
+     top is transparent so --bg shows through above the waves */
+  background: var(--bg) url("../images/layered-waves-haikei%20(1).svg") center bottom / 100% auto no-repeat fixed;
   color: var(--text);
   font-family: var(--font-ui);
   font-size: 14px;

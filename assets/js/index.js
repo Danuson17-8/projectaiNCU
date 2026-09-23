@@ -1,6 +1,7 @@
 import { supabase } from './supabaseClient.js';
 import { requireSession, wireLogoutButton } from './authGuard.js';
 import { statusLabel, statusBadgeClass, formatDateTime } from './statusUtils.js';
+import { createTicketFilter } from './ticketFilter.js';
 
 const ICONS = {
   login: '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
@@ -157,6 +158,26 @@ function renderTicketRow(ticket) {
 }
 
 let ticketsLoaded = false;
+let allTickets = [];
+
+const ticketFilter = createTicketFilter({
+  searchInput: document.getElementById('ticket-search'),
+  openBtn: document.getElementById('ticket-filter-btn'),
+  dot: document.getElementById('ticket-filter-dot'),
+  modal: document.getElementById('ticket-filter-modal'),
+  onChange: renderHistory,
+});
+
+function renderHistory() {
+  const listEl = document.getElementById('panel-history');
+  const matches = allTickets.filter(ticketFilter.matches);
+  listEl.innerHTML = '';
+  if (!matches.length) {
+    listEl.innerHTML = `<p class="text-faint">ไม่พบรายการที่ตรงกับการค้นหา</p>`;
+    return;
+  }
+  matches.forEach((ticket) => listEl.appendChild(renderTicketRow(ticket)));
+}
 
 async function loadTickets() {
   if (ticketsLoaded) return;
@@ -182,7 +203,9 @@ async function loadTickets() {
     return;
   }
 
-  data.forEach((ticket) => listEl.appendChild(renderTicketRow(ticket)));
+  allTickets = data;
+  ticketFilter.setTickets(allTickets);
+  renderHistory();
 }
 
 function switchTab(tab) {
@@ -202,6 +225,7 @@ function switchTab(tab) {
   panelReport.hidden = isHistory;
   panelHistory.hidden = !isHistory;
   document.getElementById('picker-controls').hidden = isHistory;
+  document.getElementById('history-controls').hidden = !isHistory;
   subtitle.textContent = isHistory
     ? 'ปัญหาที่คุณเคยแจ้งไว้ และสถานะล่าสุด'
     : 'เลือกระบบที่คุณพบปัญหา เพื่อเริ่มแจ้งปัญหา';

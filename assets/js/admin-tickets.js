@@ -1,8 +1,33 @@
 import { supabase } from './supabaseClient.js';
 import { requireAdminSession, showSidebarUser, wireLogoutButton } from './authGuard.js';
 import { formatDateTime } from './statusUtils.js';
+import { createTicketFilter } from './ticketFilter.js';
 
 const tbody = document.getElementById('tickets-tbody');
+const countEl = document.getElementById('tickets-count');
+
+let allTickets = [];
+
+const ticketFilter = createTicketFilter({
+  searchInput: document.getElementById('ticket-search'),
+  openBtn: document.getElementById('ticket-filter-btn'),
+  dot: document.getElementById('ticket-filter-dot'),
+  modal: document.getElementById('ticket-filter-modal'),
+  onChange: renderTickets,
+});
+
+function renderTickets() {
+  const matches = allTickets.filter(ticketFilter.matches);
+  tbody.innerHTML = '';
+  countEl.textContent = ticketFilter.isActive()
+    ? `แสดง ${matches.length} จาก ${allTickets.length} รายการ`
+    : `ทั้งหมด ${allTickets.length} รายการ`;
+  if (!matches.length) {
+    tbody.innerHTML = `<tr><td colspan="5" class="text-faint">ไม่พบรายการที่ตรงกับการค้นหา</td></tr>`;
+    return;
+  }
+  matches.forEach((ticket) => tbody.appendChild(renderRow(ticket)));
+}
 
 const STATUS_OPTIONS = [
   { value: 'pending', label: 'รอตรวจสอบ' },
@@ -84,7 +109,9 @@ async function loadTickets() {
     return;
   }
 
-  data.forEach((ticket) => tbody.appendChild(renderRow(ticket)));
+  allTickets = data;
+  ticketFilter.setTickets(allTickets);
+  renderTickets();
 }
 
 wireLogoutButton(document.getElementById('logout-btn'));

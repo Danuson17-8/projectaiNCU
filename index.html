@@ -50,6 +50,13 @@
           </label>
           <button type="button" class="btn btn-secondary btn-icon picker-filter-toggle" id="filter-open-btn" aria-label="กรองระบบ" title="กรองระบบ" aria-haspopup="dialog"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"/></svg><span class="picker-filter-dot" id="filter-dot" hidden></span></button>
         </div>
+        <div class="picker-controls" id="history-controls" hidden>
+          <label class="picker-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <input type="search" id="ticket-search" placeholder="ค้นหารายการ" aria-label="ค้นหาจากข้อความ ระบบ หรือ Ticket ID" title="ค้นหาจากข้อความ ระบบ หรือ Ticket ID" autocomplete="off">
+          </label>
+          <button type="button" class="btn btn-secondary btn-icon picker-filter-toggle" id="ticket-filter-btn" aria-label="กรองรายการ" title="กรองรายการ" aria-haspopup="dialog"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"/></svg><span class="picker-filter-dot" id="ticket-filter-dot" hidden></span></button>
+        </div>
       </div>
 
       <div id="panel-report">
@@ -86,6 +93,32 @@
         <input type="checkbox" name="audience" value="staff">
         <span class="filter-option-text"><strong>ระบบบุคลากร</strong><span>งานเอกสาร ขอใช้รถ และระบบสำหรับบุคลากร</span></span>
       </label>
+    </fieldset>
+
+    <div class="row" style="gap: 10px;">
+      <button type="submit" value="clear" class="btn btn-secondary" style="flex-grow: 1;">ล้างตัวกรอง</button>
+      <button type="submit" value="apply" class="btn btn-primary" style="flex-grow: 1;">ใช้ตัวกรอง</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="modal" id="ticket-filter-modal" aria-labelledby="ticket-filter-title">
+  <form method="dialog" class="modal-body">
+    <div class="row-between">
+      <h2 class="modal-title" id="ticket-filter-title">กรองรายการแจ้งปัญหา</h2>
+      <button type="submit" value="cancel" class="modal-close" aria-label="ปิด">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <fieldset class="modal-fieldset">
+      <legend>สถานะ <span class="modal-hint">เลือกได้หลายข้อ ไม่เลือกเลย = ทุกสถานะ</span></legend>
+      <div class="filter-chips" data-filter-statuses></div>
+    </fieldset>
+
+    <fieldset class="modal-fieldset">
+      <legend>ระบบ <span class="modal-hint">เลือกได้หลายข้อ ไม่เลือกเลย = ทุกระบบ</span></legend>
+      <div class="filter-chips" data-filter-systems></div>
     </fieldset>
 
     <div class="row" style="gap: 10px;">

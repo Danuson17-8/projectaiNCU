@@ -1088,6 +1088,51 @@ table.data-table {
   border-bottom: none;
 }
 
+/* ===== Ticket status select (admin/tickets.html) ===== */
+/* border, background and text follow the selected status */
+.status-select {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--surface);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color .15s, background-color .15s, color .15s;
+}
+
+.status-select[data-status="pending"] {
+  border-color: var(--danger-dot);
+  background-color: var(--danger-soft);
+  color: var(--danger);
+}
+
+.status-select[data-status="in_progress"] {
+  border-color: var(--warning);
+  background-color: var(--warning-soft);
+  color: #8A5208;
+}
+
+.status-select[data-status="resolved"] {
+  border-color: var(--success);
+  background-color: var(--success-soft);
+  color: #1E6B3A;
+}
+
+/* the open dropdown list stays neutral */
+.status-select option {
+  background-color: var(--surface);
+  color: var(--text);
+  font-weight: 400;
+}
+
+.status-select:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
 /* ===== Toggle switch ===== */
 .toggle {
   appearance: none;

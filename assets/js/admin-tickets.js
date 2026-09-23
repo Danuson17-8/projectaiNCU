@@ -61,8 +61,8 @@ function renderRow(ticket) {
   const statusCell = tr.children[3];
   const select = document.createElement('select');
   select.setAttribute('aria-label', `สถานะของ ticket ${ticket.id}`);
-  select.style.cssText =
-    'padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border); font-size: 12.5px; font-family: inherit;';
+  select.className = 'status-select';
+  select.dataset.status = ticket.status;
 
   STATUS_OPTIONS.forEach((opt) => {
     const optionEl = document.createElement('option');
@@ -74,12 +74,14 @@ function renderRow(ticket) {
 
   select.addEventListener('change', async () => {
     const newStatus = select.value;
+    select.dataset.status = newStatus;
     select.disabled = true;
     const { error } = await supabase.from('tickets').update({ status: newStatus }).eq('id', ticket.id);
     select.disabled = false;
     if (error) {
       alert('อัปเดตสถานะไม่สำเร็จ กรุณาลองใหม่');
       select.value = ticket.status;
+      select.dataset.status = ticket.status;
       console.error(error);
       return;
     }

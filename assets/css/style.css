@@ -436,7 +436,7 @@ input, textarea, select {
   max-width: 780px;
 }
 
-/* Big decorative "NCU" in the top-right corner: letters drop in one by
+/* Big decorative "NCU" in the top-left corner: letters drop in one by
    one and bounce, a shade darker than the page with a soft shadow */
 .index-main {
   position: relative;
@@ -445,7 +445,7 @@ input, textarea, select {
 .ncu-hero {
   position: absolute;
   top: 20px;
-  right: 40px;
+  left: 40px;
   z-index: 0;
   display: flex;
   font-size: 112px;
@@ -464,8 +464,14 @@ input, textarea, select {
   display: inline-block;
   opacity: 0;
   transform-origin: 50% 100%;
-  animation: ncu-drop .9s cubic-bezier(.3, .7, .4, 1) forwards;
-  animation-delay: calc(.25s + var(--i) * .14s);
+  /* drop in once, then a small hop every 3s (letters in a wave) that
+     starts as each letter lands; the hop never re-plays the drop */
+  animation:
+    ncu-drop 1.4s cubic-bezier(.3, .7, .4, 1) forwards,
+    ncu-hop 3s ease-in-out infinite;
+  animation-delay:
+    calc(.3s + var(--i) * .22s),
+    calc(1.7s + var(--i) * .22s);
 }
 
 @keyframes ncu-drop {
@@ -477,10 +483,19 @@ input, textarea, select {
   100% { opacity: 1; transform: none; }
 }
 
+/* rests for most of the cycle, hops in the last ~0.6s */
+@keyframes ncu-hop {
+  0%, 80% { transform: none; }
+  86% { transform: translateY(-18px) scale(.96, 1.05); }
+  92% { transform: translateY(0) scale(1.06, .94); }
+  96% { transform: translateY(-5px) scale(.99, 1.01); }
+  100% { transform: none; }
+}
+
 @media (max-width: 560px) {
   .ncu-hero {
     top: 8px;
-    right: 16px;
+    left: 16px;
     font-size: 56px;
   }
 }

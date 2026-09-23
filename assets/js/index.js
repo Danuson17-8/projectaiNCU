@@ -169,7 +169,7 @@ const ticketFilter = createTicketFilter({
 });
 
 function renderHistory() {
-  const listEl = document.getElementById('panel-history');
+  const listEl = document.getElementById('history-items');
   const matches = allTickets.filter(ticketFilter.matches);
   listEl.innerHTML = '';
   if (!matches.length) {
@@ -183,7 +183,7 @@ async function loadTickets() {
   if (ticketsLoaded) return;
   ticketsLoaded = true;
 
-  const listEl = document.getElementById('panel-history');
+  const listEl = document.getElementById('history-items');
   const { data, error } = await supabase
     .from('tickets')
     .select('id, message, status, created_at, systems(name)')

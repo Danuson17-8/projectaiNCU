@@ -406,42 +406,74 @@ input, textarea, select {
   min-height: 0;
 }
 
+/* Glass panel around the history list; the inner .history-scroll does
+   the scrolling so its scrollbar sits inside the panel's padding */
 .history-list {
   display: flex;
   flex-direction: column;
-  padding: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 1px 2px rgba(20, 20, 18, 0.04), 0 4px 16px rgba(20, 20, 18, 0.04);
+  padding: 12px 8px 12px 12px;
+  background: rgba(255, 255, 255, 0.45);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+  box-shadow:
+    0 8px 32px rgba(20, 20, 18, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.history-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
 }
 
 .page.is-history .history-list {
+  flex: 1;
+  min-height: 0;
+}
+
+.page.is-history .history-scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 
-/* ticket rows inside the list card: dividers instead of nested cards */
-.history-list > .card {
+/* Firefox; Chromium would ignore the ::-webkit-scrollbar styles below
+   if these standard properties were set, so they are scoped away from it */
+@supports not selector(::-webkit-scrollbar) {
+  .history-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(20, 20, 18, 0.22) transparent;
+  }
+}
+
+.history-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.history-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(20, 20, 18, 0.22);
+}
+
+.history-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.history-scroll::-webkit-scrollbar-button {
+  display: none;
+}
+
+.history-scroll > .card {
   flex-shrink: 0;
-  border: none;
-  border-radius: 0;
-  padding: 14px 16px;
 }
 
-.history-list > .card + .card {
-  border-top: 1px solid var(--border-soft);
-}
-
-.history-list > .card:hover {
-  background: var(--bg);
-}
-
-.history-list > p {
+.history-scroll > p {
   margin: 0;
-  padding: 16px;
+  padding: 8px 4px;
 }
 
 @media (max-width: 560px) {

@@ -144,7 +144,8 @@ input, textarea, select {
 
 @media (max-width: 560px) {
   .user-email {
-    max-width: 110px;
+    /* index.js already cuts the email to 9 characters + "…" on phones */
+    max-width: none;
   }
 }
 
@@ -280,7 +281,8 @@ input, textarea, select {
 }
 
 .btn-admin-link {
-  padding: 6px 12px;
+  gap: 2px;
+  padding: 6px 8px 6px 12px;
   font-size: 12px;
   flex-shrink: 0;
   white-space: nowrap;

@@ -144,12 +144,26 @@ function wireTabs() {
 wireLogoutButton(document.getElementById('logout-btn'), 'login.html');
 wireTabs();
 
+// On phones show exactly the first 9 characters of the email, then "…"
+const PHONE_EMAIL_CHARS = 9;
+const phoneQuery = window.matchMedia('(max-width: 560px)');
+
+function showUserEmail(email) {
+  const el = document.getElementById('user-email');
+  el.title = email;
+  const render = () => {
+    el.textContent = phoneQuery.matches && email.length > PHONE_EMAIL_CHARS
+      ? email.slice(0, PHONE_EMAIL_CHARS) + '…'
+      : email;
+  };
+  render();
+  phoneQuery.addEventListener('change', render);
+}
+
 async function init() {
   const session = await requireSession('login.html');
   if (!session) return;
-  const userEmailEl = document.getElementById('user-email');
-  userEmailEl.textContent = session.user.email || '';
-  userEmailEl.title = session.user.email || '';
+  showUserEmail(session.user.email || '');
   loadSystems();
 
   const params = new URLSearchParams(window.location.search);

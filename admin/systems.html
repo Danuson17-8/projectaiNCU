@@ -53,12 +53,13 @@
             <tr>
               <th>ระบบ</th>
               <th>Slug</th>
+              <th>ประเภท</th>
               <th>สถานะ</th>
               <th>จัดการ</th>
             </tr>
           </thead>
           <tbody id="systems-tbody">
-            <tr><td colspan="4" class="text-faint">กำลังโหลด...</td></tr>
+            <tr><td colspan="5" class="text-faint">กำลังโหลด...</td></tr>
           </tbody>
         </table>
       </div>
@@ -81,6 +82,14 @@
         <div class="field">
           <label for="sys-slug">รหัสระบบ (slug)</label>
           <input type="text" id="sys-slug" class="mono" placeholder="sms-notify" required pattern="[a-z0-9-]+">
+        </div>
+
+        <div class="field">
+          <label for="sys-audience">ประเภทระบบ</label>
+          <select id="sys-audience">
+            <option value="student">ระบบนักศึกษา</option>
+            <option value="staff">ระบบบุคลากร</option>
+          </select>
         </div>
 
         <div class="field">

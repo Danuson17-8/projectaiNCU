@@ -32,7 +32,10 @@ function renderSystemCard(system) {
   a.innerHTML = `
     <div class="card-icon">${icon}</div>
     <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 3px;">
-      <span style="font-size: 14.5px; font-weight: 600;">${escapeHtml(system.name)}</span>
+      <span class="row" style="gap: 8px; flex-wrap: wrap;">
+        <span style="font-size: 14.5px; font-weight: 600;">${escapeHtml(system.name)}</span>
+        <span class="pill pill-audience" data-audience="${escapeHtml(system.audience)}">${AUDIENCE_LABEL[system.audience] || ''}</span>
+      </span>
       <span style="font-size: 12.5px;" class="text-faint">${escapeHtml(system.description || '')}</span>
     </div>
     ${CHEVRON}
@@ -40,11 +43,46 @@ function renderSystemCard(system) {
   return a;
 }
 
+const AUDIENCE_LABEL = { student: 'นักศึกษา', staff: 'บุคลากร' };
+
+let allSystems = [];
+let audienceFilter = '';
+
+// Re-render the grid from allSystems using the search box + type filter
+function renderSystems() {
+  const grid = document.getElementById('systems-grid');
+  const query = document.getElementById('system-search').value.trim().toLowerCase();
+  const matches = allSystems.filter((s) => {
+    if (audienceFilter && s.audience !== audienceFilter) return false;
+    if (!query) return true;
+    return `${s.name} ${s.description || ''}`.toLowerCase().includes(query);
+  });
+
+  grid.innerHTML = '';
+  if (!matches.length) {
+    grid.innerHTML = `<p class="text-faint">ไม่พบระบบที่ตรงกับการค้นหา</p>`;
+    return;
+  }
+  matches.forEach((system) => grid.appendChild(renderSystemCard(system)));
+}
+
+function wireSystemFilters() {
+  document.getElementById('system-search').addEventListener('input', renderSystems);
+  const buttons = document.querySelectorAll('.picker-filter-btn');
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      audienceFilter = btn.dataset.audience;
+      buttons.forEach((b) => b.setAttribute('aria-checked', String(b === btn)));
+      renderSystems();
+    });
+  });
+}
+
 async function loadSystems() {
   const grid = document.getElementById('systems-grid');
   const { data, error } = await supabase
     .from('systems')
-    .select('id,name,slug,description,icon_color')
+    .select('id,name,slug,description,icon_color,audience')
     .eq('is_active', true)
     .order('created_at', { ascending: true });
 
@@ -61,7 +99,8 @@ async function loadSystems() {
     return;
   }
 
-  data.forEach((system) => grid.appendChild(renderSystemCard(system)));
+  allSystems = data;
+  renderSystems();
 }
 
 function truncate(str, max) {
@@ -133,6 +172,7 @@ function switchTab(tab) {
 
   panelReport.hidden = isHistory;
   panelHistory.hidden = !isHistory;
+  document.getElementById('picker-controls').hidden = isHistory;
   subtitle.textContent = isHistory
     ? 'ปัญหาที่คุณเคยแจ้งไว้ และสถานะล่าสุด'
     : 'เลือกระบบที่คุณพบปัญหา เพื่อเริ่มแจ้งปัญหา';
@@ -147,6 +187,7 @@ function wireTabs() {
 
 wireLogoutButton(document.getElementById('logout-btn'), 'login.html');
 wireTabs();
+wireSystemFilters();
 
 // On phones show exactly the first 9 characters of the email, then "…"
 const PHONE_EMAIL_CHARS = 9;

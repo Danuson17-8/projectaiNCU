@@ -17,9 +17,26 @@ create table if not exists public.systems (
   slug text not null unique,
   description text,
   icon_color text not null default '#0F6C61',
+  audience text not null default 'student' check (audience in ('student', 'staff')),
   is_active boolean not null default true,
   created_at timestamptz not null default now()
 );
+
+-- older installs: add the audience column (who the system is for) and
+-- tag the staff-facing defaults; only runs the first time, so later
+-- edits made by admins are never overwritten
+do $$
+begin
+  if not exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'systems' and column_name = 'audience'
+  ) then
+    alter table public.systems
+      add column audience text not null default 'student'
+      check (audience in ('student', 'staff'));
+    update public.systems set audience = 'staff' where slug in ('e-document', 'vehicle-booking');
+  end if;
+end $$;
 
 create table if not exists public.tickets (
   id uuid primary key default gen_random_uuid(),
@@ -194,12 +211,12 @@ revoke all on function public.track_ticket(uuid) from public;
 grant execute on function public.track_ticket(uuid) to authenticated;
 
 -- ---------- Seed data ----------
-insert into public.systems (name, slug, description, icon_color, is_active)
+insert into public.systems (name, slug, description, icon_color, is_active, audience)
 values
-  ('ระบบ E-Document', 'e-document', 'แจ้งปัญหาการรับ-ส่งหนังสือราชการ ลงนาม หรือแนบไฟล์เอกสาร', '#2563EB', true),
-  ('ระบบขอใช้รถมหาวิทยาลัย', 'vehicle-booking', 'แจ้งปัญหาการจองรถ การอนุมัติคำขอ หรือข้อมูลรถ/คนขับ', '#D97757', true),
-  ('ระบบวีซ่า', 'visa', 'แจ้งปัญหาการยื่นคำขอวีซ่า อัปโหลดเอกสาร หรือสถานะคำขอ', '#7C3AED', true),
-  ('ระบบทะเบียนนักศึกษา', 'student-registry', 'แจ้งปัญหาการลงทะเบียนเรียน ผลการเรียน หรือข้อมูลนักศึกษา', '#0F6C61', true)
+  ('ระบบ E-Document', 'e-document', 'แจ้งปัญหาการรับ-ส่งหนังสือราชการ ลงนาม หรือแนบไฟล์เอกสาร', '#2563EB', true, 'staff'),
+  ('ระบบขอใช้รถมหาวิทยาลัย', 'vehicle-booking', 'แจ้งปัญหาการจองรถ การอนุมัติคำขอ หรือข้อมูลรถ/คนขับ', '#D97757', true, 'staff'),
+  ('ระบบวีซ่า', 'visa', 'แจ้งปัญหาการยื่นคำขอวีซ่า อัปโหลดเอกสาร หรือสถานะคำขอ', '#7C3AED', true, 'student'),
+  ('ระบบทะเบียนนักศึกษา', 'student-registry', 'แจ้งปัญหาการลงทะเบียนเรียน ผลการเรียน หรือข้อมูลนักศึกษา', '#0F6C61', true, 'student')
 on conflict (slug) do nothing;
 
 -- the v1 defaults are replaced by the list above; hide them from users

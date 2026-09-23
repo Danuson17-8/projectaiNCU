@@ -39,7 +39,21 @@
           <button type="button" class="tab-btn" id="tab-report" role="tab" aria-selected="true" data-active="true">แจ้งปัญหา</button>
           <button type="button" class="tab-btn" id="tab-history" role="tab" aria-selected="false">ประวัติการแจ้ง</button>
         </div>
-        <p style="margin: 0; font-size: 14px; text-align: center;" class="text-muted" id="panel-subtitle">เลือกระบบที่คุณพบปัญหา เพื่อเริ่มแจ้งปัญหา</p>
+      </div>
+
+      <div class="picker-toolbar">
+        <p class="text-muted picker-title" id="panel-subtitle">เลือกระบบที่คุณพบปัญหา เพื่อเริ่มแจ้งปัญหา</p>
+        <div class="picker-controls" id="picker-controls">
+          <label class="picker-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <input type="search" id="system-search" placeholder="ค้นหาระบบ" aria-label="ค้นหาระบบ" autocomplete="off">
+          </label>
+          <div class="picker-filter" role="radiogroup" aria-label="ประเภทระบบ">
+            <button type="button" class="picker-filter-btn" data-audience="" role="radio" aria-checked="true">ทั้งหมด</button>
+            <button type="button" class="picker-filter-btn" data-audience="student" role="radio" aria-checked="false">นักศึกษา</button>
+            <button type="button" class="picker-filter-btn" data-audience="staff" role="radio" aria-checked="false">บุคลากร</button>
+          </div>
+        </div>
       </div>
 
       <div id="panel-report">

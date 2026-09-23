@@ -373,6 +373,108 @@ input, textarea, select {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
+/* ===== System picker toolbar (index.html) ===== */
+.picker-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+  flex-wrap: wrap;
+}
+
+.picker-title {
+  margin: 0;
+  font-size: 14px;
+}
+
+.picker-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.picker-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-faint);
+}
+
+.picker-search:focus-within {
+  border-color: var(--accent);
+}
+
+.picker-search input {
+  width: 160px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.picker-filter {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-md);
+  background: #F1F1EE;
+}
+
+.picker-filter-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.picker-filter-btn[aria-checked="true"] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* System type tag (student / staff) */
+.pill-audience {
+  padding: 2px 8px;
+  font-size: 10.5px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.pill-audience[data-audience="staff"] {
+  background: #EEF2FF;
+  color: #3F4BB8;
+}
+
+@media (max-width: 560px) {
+  .picker-controls,
+  .picker-search {
+    width: 100%;
+  }
+  .picker-search input {
+    width: 100%;
+  }
+  .picker-filter {
+    width: 100%;
+  }
+  .picker-filter-btn {
+    flex: 1;
+  }
+}
+
 .systems-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

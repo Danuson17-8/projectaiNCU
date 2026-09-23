@@ -15,12 +15,12 @@
 -- ============================================================
 
 -- make sure the four default systems exist (same rows as migration.sql)
-insert into public.systems (name, slug, description, icon_color, is_active)
+insert into public.systems (name, slug, description, icon_color, is_active, audience)
 values
-  ('ระบบ E-Document', 'e-document', 'แจ้งปัญหาการรับ-ส่งหนังสือราชการ ลงนาม หรือแนบไฟล์เอกสาร', '#2563EB', true),
-  ('ระบบขอใช้รถมหาวิทยาลัย', 'vehicle-booking', 'แจ้งปัญหาการจองรถ การอนุมัติคำขอ หรือข้อมูลรถ/คนขับ', '#D97757', true),
-  ('ระบบวีซ่า', 'visa', 'แจ้งปัญหาการยื่นคำขอวีซ่า อัปโหลดเอกสาร หรือสถานะคำขอ', '#7C3AED', true),
-  ('ระบบทะเบียนนักศึกษา', 'student-registry', 'แจ้งปัญหาการลงทะเบียนเรียน ผลการเรียน หรือข้อมูลนักศึกษา', '#0F6C61', true)
+  ('ระบบ E-Document', 'e-document', 'แจ้งปัญหาการรับ-ส่งหนังสือราชการ ลงนาม หรือแนบไฟล์เอกสาร', '#2563EB', true, 'staff'),
+  ('ระบบขอใช้รถมหาวิทยาลัย', 'vehicle-booking', 'แจ้งปัญหาการจองรถ การอนุมัติคำขอ หรือข้อมูลรถ/คนขับ', '#D97757', true, 'staff'),
+  ('ระบบวีซ่า', 'visa', 'แจ้งปัญหาการยื่นคำขอวีซ่า อัปโหลดเอกสาร หรือสถานะคำขอ', '#7C3AED', true, 'student'),
+  ('ระบบทะเบียนนักศึกษา', 'student-registry', 'แจ้งปัญหาการลงทะเบียนเรียน ผลการเรียน หรือข้อมูลนักศึกษา', '#0F6C61', true, 'student')
 on conflict (slug) do nothing;
 
 -- remove the previous mock batch

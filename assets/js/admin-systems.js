@@ -11,6 +11,9 @@ const nameInput = document.getElementById('sys-name');
 const slugInput = document.getElementById('sys-slug');
 const descInput = document.getElementById('sys-desc');
 const activeInput = document.getElementById('sys-active');
+const audienceInput = document.getElementById('sys-audience');
+
+const AUDIENCE_LABEL = { student: 'นักศึกษา', staff: 'บุคลากร' };
 
 const EDIT_ICON =
   '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6B65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg>';
@@ -45,6 +48,7 @@ function openPanelForCreate() {
   idInput.value = '';
   panelTitle.textContent = 'เพิ่มระบบใหม่';
   activeInput.checked = true;
+  audienceInput.value = 'student';
   setSelectedColor('#0F6C61');
   formError.textContent = '';
   panel.hidden = false;
@@ -56,6 +60,7 @@ function openPanelForEdit(system) {
   slugInput.value = system.slug;
   descInput.value = system.description || '';
   activeInput.checked = system.is_active;
+  audienceInput.value = system.audience || 'student';
   setSelectedColor(system.icon_color);
   panelTitle.textContent = `แก้ไข: ${system.name}`;
   formError.textContent = '';
@@ -84,6 +89,7 @@ function renderRow(system) {
       </div>
     </td>
     <td class="mono text-faint">${escapeHtml(system.slug)}</td>
+    <td><span class="pill pill-audience" data-audience="${escapeHtml(system.audience)}">${AUDIENCE_LABEL[system.audience] || '-'}</span></td>
     <td>${statusBadge}</td>
     <td>
       <div class="row" style="gap: 6px;">
@@ -108,13 +114,13 @@ async function loadSystems() {
   tbody.innerHTML = '';
 
   if (error) {
-    tbody.innerHTML = `<tr><td colspan="4" class="field-error">โหลดข้อมูลไม่สำเร็จ</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" class="field-error">โหลดข้อมูลไม่สำเร็จ</td></tr>`;
     console.error(error);
     return;
   }
 
   if (!data || data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4" class="text-faint">ยังไม่มีระบบ กด "+ เพิ่มระบบใหม่" เพื่อเริ่มต้น</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" class="text-faint">ยังไม่มีระบบ กด "+ เพิ่มระบบใหม่" เพื่อเริ่มต้น</td></tr>`;
     return;
   }
 
@@ -146,6 +152,7 @@ form.addEventListener('submit', async (e) => {
     description: descInput.value.trim(),
     icon_color: selectedColor(),
     is_active: activeInput.checked,
+    audience: audienceInput.value,
   };
 
   if (!payload.name || !payload.slug) {

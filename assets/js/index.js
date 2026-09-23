@@ -224,6 +224,8 @@ function switchTab(tab) {
 
   panelReport.hidden = isHistory;
   panelHistory.hidden = !isHistory;
+  // history mode: the page stops scrolling and the list scrolls inside its card
+  document.getElementById('page').classList.toggle('is-history', isHistory);
   document.getElementById('picker-controls').hidden = isHistory;
   document.getElementById('history-controls').hidden = !isHistory;
   subtitle.textContent = isHistory

@@ -373,6 +373,86 @@ input, textarea, select {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
+/* ===== Main page layout (index.html) ===== */
+.index-main {
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 56px 24px;
+}
+
+.index-content {
+  width: 100%;
+  max-width: 780px;
+}
+
+/* History tab: lock the page to the viewport; only the list scrolls */
+.page.is-history {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+}
+
+.page.is-history .index-main {
+  min-height: 0;
+  overflow: hidden;
+  padding-bottom: 24px;
+}
+
+.page.is-history .index-content {
+  flex: 1;
+  min-height: 0;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 2px rgba(20, 20, 18, 0.04), 0 4px 16px rgba(20, 20, 18, 0.04);
+}
+
+.page.is-history .history-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* ticket rows inside the list card: dividers instead of nested cards */
+.history-list > .card {
+  flex-shrink: 0;
+  border: none;
+  border-radius: 0;
+  padding: 14px 16px;
+}
+
+.history-list > .card + .card {
+  border-top: 1px solid var(--border-soft);
+}
+
+.history-list > .card:hover {
+  background: var(--bg);
+}
+
+.history-list > p {
+  margin: 0;
+  padding: 16px;
+}
+
+@media (max-width: 560px) {
+  .index-main {
+    padding: 32px 16px;
+  }
+  .page.is-history .index-main {
+    padding-bottom: 16px;
+  }
+}
+
 /* ===== System picker toolbar (index.html) ===== */
 .picker-toolbar {
   display: flex;

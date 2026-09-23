@@ -208,6 +208,21 @@ async function loadTickets() {
   renderHistory();
 }
 
+// Slide the white pill under the active tab
+function moveTabIndicator() {
+  const active = document.querySelector('.tab-btn[data-active="true"]');
+  const indicator = document.getElementById('tab-indicator');
+  indicator.style.width = `${active.offsetWidth}px`;
+  indicator.style.transform = `translateX(${active.offsetLeft}px)`;
+}
+
+// Slide the incoming panel in from the side of the tab that was picked
+function slideIn(el, fromRight) {
+  el.classList.remove('slide-from-left', 'slide-from-right');
+  void el.offsetWidth; // restart the animation if it is already running
+  el.classList.add(fromRight ? 'slide-from-right' : 'slide-from-left');
+}
+
 function switchTab(tab) {
   const tabReport = document.getElementById('tab-report');
   const tabHistory = document.getElementById('tab-history');
@@ -216,6 +231,7 @@ function switchTab(tab) {
   const subtitle = document.getElementById('panel-subtitle');
 
   const isHistory = tab === 'history';
+  const changed = (tabHistory.dataset.active === 'true') !== isHistory;
 
   tabReport.dataset.active = String(!isHistory);
   tabReport.setAttribute('aria-selected', String(!isHistory));
@@ -232,12 +248,25 @@ function switchTab(tab) {
     ? 'ปัญหาที่คุณเคยแจ้งไว้ และสถานะล่าสุด'
     : 'เลือกระบบที่คุณพบปัญหา เพื่อเริ่มแจ้งปัญหา';
 
+  moveTabIndicator();
+  if (changed) {
+    slideIn(isHistory ? panelHistory : panelReport, isHistory);
+    slideIn(document.querySelector('.picker-toolbar'), isHistory);
+  }
+
   if (isHistory) loadTickets();
 }
 
 function wireTabs() {
   document.getElementById('tab-report').addEventListener('click', () => switchTab('report'));
   document.getElementById('tab-history').addEventListener('click', () => switchTab('history'));
+
+  // place the pill without animating, then enable the slide transition;
+  // re-measure when the tabs resize (web font load, window resize)
+  const tabSwitch = document.getElementById('tab-switch');
+  moveTabIndicator();
+  new ResizeObserver(moveTabIndicator).observe(tabSwitch);
+  requestAnimationFrame(() => tabSwitch.classList.add('is-ready'));
 }
 
 wireLogoutButton(document.getElementById('logout-btn'), 'login.html');

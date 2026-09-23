@@ -348,11 +348,27 @@ input, textarea, select {
 }
 
 .tab-switch {
+  position: relative;
   display: inline-flex;
   gap: 2px;
   padding: 5px;
   border-radius: 12px;
   background: #F1F1EE;
+}
+
+/* white pill that slides between tabs (positioned by index.js) */
+.tab-indicator {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 0;
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.tab-switch.is-ready .tab-indicator {
+  transition: transform .35s cubic-bezier(.4, 0, .2, 1), width .35s cubic-bezier(.4, 0, .2, 1);
 }
 
 .tab-btn {
@@ -365,12 +381,42 @@ input, textarea, select {
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
+  position: relative;
+  z-index: 1;
+  transition: color .25s;
 }
 
 .tab-btn[data-active="true"] {
-  background: var(--surface);
   color: var(--text);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* tab content slides in from the side of the chosen tab */
+.slide-from-right {
+  animation: slide-from-right .35s cubic-bezier(.4, 0, .2, 1);
+}
+
+.slide-from-left {
+  animation: slide-from-left .35s cubic-bezier(.4, 0, .2, 1);
+}
+
+@keyframes slide-from-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes slide-from-left {
+  from { opacity: 0; transform: translateX(-28px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-switch.is-ready .tab-indicator {
+    transition: none;
+  }
+  .slide-from-right,
+  .slide-from-left {
+    animation: none;
+  }
 }
 
 /* ===== Main page layout (index.html) ===== */

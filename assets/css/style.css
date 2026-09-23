@@ -430,8 +430,66 @@ input, textarea, select {
 }
 
 .index-content {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 780px;
+}
+
+/* Big decorative "NCU" in the top-right corner: letters drop in one by
+   one and bounce, a shade darker than the page with a soft shadow */
+.index-main {
+  position: relative;
+}
+
+.ncu-hero {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  z-index: 0;
+  display: flex;
+  font-size: 112px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #E2E2DA;
+  text-shadow:
+    0 2px 0 #D6D6CD,
+    0 10px 24px rgba(20, 20, 18, 0.12);
+  pointer-events: none;
+  user-select: none;
+}
+
+.ncu-hero span {
+  display: inline-block;
+  opacity: 0;
+  transform-origin: 50% 100%;
+  animation: ncu-drop .9s cubic-bezier(.3, .7, .4, 1) forwards;
+  animation-delay: calc(.25s + var(--i) * .14s);
+}
+
+@keyframes ncu-drop {
+  0% { opacity: 0; transform: translateY(-140px) scale(.7, 1.15); }
+  45% { opacity: 1; transform: translateY(0) scale(1.12, .82); }
+  62% { transform: translateY(-26px) scale(.95, 1.06); }
+  78% { transform: translateY(0) scale(1.05, .94); }
+  90% { transform: translateY(-6px) scale(.99, 1.01); }
+  100% { opacity: 1; transform: none; }
+}
+
+@media (max-width: 560px) {
+  .ncu-hero {
+    top: 8px;
+    right: 16px;
+    font-size: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ncu-hero span {
+    opacity: 1;
+    animation: none;
+  }
 }
 
 /* History tab: lock the page to the viewport; only the list scrolls */

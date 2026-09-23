@@ -6,6 +6,7 @@
 <title>ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย — Admin — Dashboard</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../assets/css/style.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-wc@0.9.28/dist/dotlottie-wc.js"></script>
 </head>
 <body>
 <div class="page">
@@ -40,9 +41,18 @@
 
     <main class="admin-main dash">
       <div class="dash-header">
-        <div>
-          <h1 class="dash-title">ภาพรวม</h1>
-          <p class="dash-subtitle" id="dash-updated">กำลังโหลดข้อมูล...</p>
+        <div class="dash-heading">
+          <dotlottie-wc
+            class="dash-title-lottie"
+            src="../assets/images/Dashoard.lottie"
+            autoplay
+            loop
+            aria-hidden="true"
+          ></dotlottie-wc>
+          <div>
+            <h1 class="dash-title">ภาพรวม</h1>
+            <p class="dash-subtitle" id="dash-updated">กำลังโหลดข้อมูล...</p>
+          </div>
         </div>
         <div class="dash-range" role="radiogroup" aria-label="ช่วงเวลา">
           <button type="button" class="dash-range-btn" data-days="7" role="radio" aria-checked="false">7 วัน</button>

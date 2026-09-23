@@ -819,6 +819,18 @@ table.data-table {
   flex-wrap: wrap;
 }
 
+.dash-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dash-title-lottie {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
 .dash-title {
   margin: 0;
   font-size: 24px;

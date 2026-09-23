@@ -2,7 +2,7 @@
 -- Mock tickets for the admin dashboard (demo data)
 -- Paste into Supabase Dashboard → SQL Editor → Run, after migration.sql.
 --
--- Creates ~700 tickets spread over the last 120 days across the four
+-- Creates ~700 tickets spread over the last 120 days across the six
 -- default systems: more on weekdays and office hours, a gently rising
 -- trend, and statuses that depend on age (new ones pending, old ones
 -- mostly resolved, a few left stuck so "ค้างนานที่สุด" has content).
@@ -14,13 +14,15 @@
 -- To remove all mock data, run only the "delete" statement below.
 -- ============================================================
 
--- make sure the four default systems exist (same rows as migration.sql)
+-- make sure the six default systems exist (same rows as migration.sql)
 insert into public.systems (name, slug, description, icon_color, is_active, audience)
 values
   ('ระบบ E-Document', 'e-document', 'แจ้งปัญหาการรับ-ส่งหนังสือราชการ ลงนาม หรือแนบไฟล์เอกสาร', '#2563EB', true, 'staff'),
   ('ระบบขอใช้รถมหาวิทยาลัย', 'vehicle-booking', 'แจ้งปัญหาการจองรถ การอนุมัติคำขอ หรือข้อมูลรถ/คนขับ', '#D97757', true, 'staff'),
   ('ระบบวีซ่า', 'visa', 'แจ้งปัญหาการยื่นคำขอวีซ่า อัปโหลดเอกสาร หรือสถานะคำขอ', '#7C3AED', true, 'student'),
-  ('ระบบทะเบียนนักศึกษา', 'student-registry', 'แจ้งปัญหาการลงทะเบียนเรียน ผลการเรียน หรือข้อมูลนักศึกษา', '#0F6C61', true, 'student')
+  ('ระบบทะเบียนนักศึกษา', 'student-registry', 'แจ้งปัญหาการลงทะเบียนเรียน ผลการเรียน หรือข้อมูลนักศึกษา', '#0F6C61', true, 'student'),
+  ('ระบบจองห้อง', 'room-booking', 'แจ้งปัญหาการจองห้องเรียน ห้องประชุม หรือตารางการใช้ห้อง', '#D97757', true, 'staff'),
+  ('App NES', 'app-nes', 'แจ้งปัญหาการใช้งานแอปพลิเคชัน NES บนมือถือ', '#2563EB', true, 'student')
 on conflict (slug) do nothing;
 
 -- remove the previous mock batch
@@ -47,9 +49,11 @@ placed as (
   select
     g,
     case
-      when r_sys < 0.34 then 'student-registry'
-      when r_sys < 0.60 then 'e-document'
-      when r_sys < 0.82 then 'vehicle-booking'
+      when r_sys < 0.26 then 'student-registry'
+      when r_sys < 0.46 then 'e-document'
+      when r_sys < 0.60 then 'room-booking'
+      when r_sys < 0.74 then 'vehicle-booking'
+      when r_sys < 0.88 then 'app-nes'
       else 'visa'
     end as slug,
     r_msg, r_weekend, shift_days, r_status, r_fix,
@@ -114,6 +118,24 @@ msgs(slug, list) as (
       'ข้อมูลวันหมดอายุวีซ่าแสดงผิด',
       'ต่ออายุวีซ่านักศึกษาแล้วระบบยังแจ้งเตือนว่าหมดอายุ',
       'ดาวน์โหลดหนังสือรับรองแล้วไฟล์เสีย'
+    ]),
+    ('room-booking', array[
+      'จองห้องประชุมแล้วระบบแจ้งว่าห้องไม่ว่าง ทั้งที่ปฏิทินว่าง',
+      'จองห้องซ้อนเวลากับคนอื่นได้ ระบบไม่เตือน',
+      'ยกเลิกการจองห้องไม่ได้ ปุ่มยกเลิกกดไม่ติด',
+      'ไม่ได้รับอีเมลยืนยันการจองห้อง',
+      'ตารางการใช้ห้องแสดงเวลาเลื่อนไป 7 ชั่วโมง',
+      'ค้นหาห้องตามจำนวนที่นั่งแล้วผลลัพธ์ไม่ถูกต้อง',
+      'ผู้อนุมัติไม่เห็นคำขอจองห้องในรายการรออนุมัติ'
+    ]),
+    ('app-nes', array[
+      'เปิดแอป NES แล้วเด้งออกทันที (iOS)',
+      'เข้าสู่ระบบในแอปไม่ได้ ขึ้นว่า token หมดอายุ',
+      'ไม่ได้รับการแจ้งเตือน push notification',
+      'หน้าตารางเรียนในแอปโหลดไม่ขึ้น หมุนค้าง',
+      'สแกน QR เช็กชื่อในแอปแล้วขึ้น error',
+      'แอปแสดงข้อมูลไม่ตรงกับหน้าเว็บ',
+      'อัปเดตแอปเวอร์ชันล่าสุดแล้วเข้าใช้งานไม่ได้ (Android)'
     ])
 ),
 shaped as (

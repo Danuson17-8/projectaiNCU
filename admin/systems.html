@@ -10,24 +10,27 @@
 <body>
 <div class="page">
 
-  <div class="topbar topbar-admin">
-    <div class="topbar-left">
-      <div class="logo-mark">NCU</div>
-      <span class="wordmark">ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย</span>
-      <span class="pill pill-dark">Admin</span>
-    </div>
-    <div class="topbar-right">
-      <a class="topbar-link" href="../index.html">← มุมมอง user</a>
-      <button class="btn btn-secondary" id="logout-btn" style="padding: 6px 12px; font-size: 12px;">ออกจากระบบ</button>
-    </div>
-  </div>
-
   <div class="admin-body">
 
-    <div class="admin-nav">
-      <a class="admin-nav-item active" href="systems.html">Systems</a>
-      <a class="admin-nav-item" href="tickets.html">Tickets</a>
-    </div>
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <div class="logo-mark">NCU</div>
+        <div class="sidebar-brand-text">
+          <span class="wordmark">ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย</span>
+          <span class="pill pill-dark">Admin</span>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <a class="admin-nav-item active" href="systems.html">Systems</a>
+        <a class="admin-nav-item" href="tickets.html">Tickets</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a class="sidebar-link" href="../index.html">← มุมมอง user</a>
+        <button class="btn btn-secondary" id="logout-btn" style="padding: 6px 12px; font-size: 12px;">ออกจากระบบ</button>
+      </div>
+    </aside>
 
     <div class="admin-main">
       <div class="row-between">

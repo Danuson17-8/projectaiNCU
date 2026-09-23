@@ -46,14 +46,15 @@ function renderSystemCard(system) {
 const AUDIENCE_LABEL = { student: 'นักศึกษา', staff: 'บุคลากร' };
 
 let allSystems = [];
-let audienceFilter = '';
+// selected system types; empty = show every type
+let audienceFilter = new Set();
 
 // Re-render the grid from allSystems using the search box + type filter
 function renderSystems() {
   const grid = document.getElementById('systems-grid');
   const query = document.getElementById('system-search').value.trim().toLowerCase();
   const matches = allSystems.filter((s) => {
-    if (audienceFilter && s.audience !== audienceFilter) return false;
+    if (audienceFilter.size && !audienceFilter.has(s.audience)) return false;
     if (!query) return true;
     return `${s.name} ${s.description || ''}`.toLowerCase().includes(query);
   });
@@ -74,9 +75,11 @@ function wireSystemFilters() {
   const openBtn = document.getElementById('filter-open-btn');
   const dot = document.getElementById('filter-dot');
 
+  const boxes = form.querySelectorAll('input[name="audience"]');
+
   openBtn.addEventListener('click', () => {
-    // start from the filter currently applied, not the last unconfirmed pick
-    form.querySelector(`input[name="audience"][value="${audienceFilter}"]`).checked = true;
+    // start from the filter currently applied, not the last unconfirmed picks
+    boxes.forEach((box) => { box.checked = audienceFilter.has(box.value); });
     modal.showModal();
   });
 
@@ -87,17 +90,17 @@ function wireSystemFilters() {
 
   modal.addEventListener('close', () => {
     if (modal.returnValue === 'apply') {
-      audienceFilter = form.querySelector('input[name="audience"]:checked').value;
+      audienceFilter = new Set([...boxes].filter((box) => box.checked).map((box) => box.value));
     } else if (modal.returnValue === 'clear') {
-      audienceFilter = '';
+      audienceFilter = new Set();
     } else {
       return;
     }
-    dot.hidden = !audienceFilter;
-    openBtn.setAttribute(
-      'aria-label',
-      audienceFilter ? `กรองระบบ (${AUDIENCE_LABEL[audienceFilter]})` : 'กรองระบบ'
-    );
+    // ticking every type is the same as no filter
+    if (audienceFilter.size === boxes.length) audienceFilter = new Set();
+    dot.hidden = !audienceFilter.size;
+    const labels = [...audienceFilter].map((a) => AUDIENCE_LABEL[a]).join(', ');
+    openBtn.setAttribute('aria-label', labels ? `กรองระบบ (${labels})` : 'กรองระบบ');
     renderSystems();
   });
 }

@@ -507,6 +507,13 @@ input, textarea, select {
   color: var(--text-muted);
 }
 
+.modal-hint {
+  display: block;
+  margin-top: 2px;
+  font-weight: 400;
+  color: var(--text-faint);
+}
+
 .filter-option {
   display: flex;
   align-items: center;

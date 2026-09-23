@@ -77,17 +77,13 @@
     </div>
 
     <fieldset class="modal-fieldset">
-      <legend>ประเภทระบบ</legend>
+      <legend>ประเภทระบบ <span class="modal-hint">เลือกได้หลายข้อ ไม่เลือกเลย = แสดงทุกระบบ</span></legend>
       <label class="filter-option">
-        <input type="radio" name="audience" value="" checked>
-        <span class="filter-option-text"><strong>ทั้งหมด</strong><span>แสดงทุกระบบ</span></span>
-      </label>
-      <label class="filter-option">
-        <input type="radio" name="audience" value="student">
+        <input type="checkbox" name="audience" value="student">
         <span class="filter-option-text"><strong>ระบบนักศึกษา</strong><span>ลงทะเบียนเรียน วีซ่า และระบบสำหรับนักศึกษา</span></span>
       </label>
       <label class="filter-option">
-        <input type="radio" name="audience" value="staff">
+        <input type="checkbox" name="audience" value="staff">
         <span class="filter-option-text"><strong>ระบบบุคลากร</strong><span>งานเอกสาร ขอใช้รถ และระบบสำหรับบุคลากร</span></span>
       </label>
     </fieldset>

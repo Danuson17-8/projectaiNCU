@@ -196,10 +196,17 @@ grant execute on function public.track_ticket(uuid) to authenticated;
 -- ---------- Seed data ----------
 insert into public.systems (name, slug, description, icon_color, is_active)
 values
-  ('ระบบล็อกอิน', 'login', 'แจ้งปัญหาการเข้าสู่ระบบ ลืมรหัสผ่าน หรือบัญชีถูกล็อก', '#0F6C61', true),
-  ('หน้าชำระเงิน', 'payment', 'แจ้งปัญหาการชำระเงิน บัตรถูกตัดเงินแต่ออเดอร์ไม่สำเร็จ', '#D6820F', true),
-  ('ระบบรายงาน', 'reports', 'แจ้งปัญหาการออกรายงานหรือข้อมูลไม่ถูกต้อง', '#2E9455', true)
+  ('ระบบ E-Document', 'e-document', 'แจ้งปัญหาการรับ-ส่งหนังสือราชการ ลงนาม หรือแนบไฟล์เอกสาร', '#2563EB', true),
+  ('ระบบขอใช้รถมหาวิทยาลัย', 'vehicle-booking', 'แจ้งปัญหาการจองรถ การอนุมัติคำขอ หรือข้อมูลรถ/คนขับ', '#D97757', true),
+  ('ระบบวีซ่า', 'visa', 'แจ้งปัญหาการยื่นคำขอวีซ่า อัปโหลดเอกสาร หรือสถานะคำขอ', '#7C3AED', true),
+  ('ระบบทะเบียนนักศึกษา', 'student-registry', 'แจ้งปัญหาการลงทะเบียนเรียน ผลการเรียน หรือข้อมูลนักศึกษา', '#0F6C61', true)
 on conflict (slug) do nothing;
+
+-- the v1 defaults are replaced by the list above; hide them from users
+-- (deactivated rather than deleted so any tickets filed on them survive)
+update public.systems
+set is_active = false
+where slug in ('login', 'payment', 'reports');
 
 -- ---------- Make your existing admin account an actual admin ----------
 -- Replace the email below with every admin account's email (comma-separate

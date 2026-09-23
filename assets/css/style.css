@@ -1031,6 +1031,11 @@ table.data-table {
   line-height: 1.35;
 }
 
+/* the admin sidebar always uses the short name "ระบบแจ้งปัญหา" */
+.sidebar-brand .wordmark-long {
+  display: none;
+}
+
 .admin-nav {
   flex-grow: 1;
   display: flex;
@@ -1069,8 +1074,13 @@ table.data-table {
   border-top: 1px solid var(--admin-surface);
 }
 
+/* "‹ มุมมอง user": full-width button, same look as the admin link on
+   the user page's top bar */
 .sidebar-switch {
-  padding: 0 6px;
+  width: 100%;
+  gap: 4px;
+  padding: 8px 12px;
+  font-size: 12.5px;
 }
 
 .sidebar-user {

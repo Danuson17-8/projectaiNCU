@@ -68,13 +68,37 @@ function renderSystems() {
 
 function wireSystemFilters() {
   document.getElementById('system-search').addEventListener('input', renderSystems);
-  const buttons = document.querySelectorAll('.picker-filter-btn');
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      audienceFilter = btn.dataset.audience;
-      buttons.forEach((b) => b.setAttribute('aria-checked', String(b === btn)));
-      renderSystems();
-    });
+
+  const modal = document.getElementById('filter-modal');
+  const form = document.getElementById('filter-form');
+  const openBtn = document.getElementById('filter-open-btn');
+  const dot = document.getElementById('filter-dot');
+
+  openBtn.addEventListener('click', () => {
+    // start from the filter currently applied, not the last unconfirmed pick
+    form.querySelector(`input[name="audience"][value="${audienceFilter}"]`).checked = true;
+    modal.showModal();
+  });
+
+  // a click on the backdrop (outside the form) closes without applying
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.close('cancel');
+  });
+
+  modal.addEventListener('close', () => {
+    if (modal.returnValue === 'apply') {
+      audienceFilter = form.querySelector('input[name="audience"]:checked').value;
+    } else if (modal.returnValue === 'clear') {
+      audienceFilter = '';
+    } else {
+      return;
+    }
+    dot.hidden = !audienceFilter;
+    openBtn.setAttribute(
+      'aria-label',
+      audienceFilter ? `กรองระบบ (${AUDIENCE_LABEL[audienceFilter]})` : 'กรองระบบ'
+    );
+    renderSystems();
   });
 }
 

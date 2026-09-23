@@ -48,11 +48,7 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
             <input type="search" id="system-search" placeholder="ค้นหาระบบ" aria-label="ค้นหาระบบ" autocomplete="off">
           </label>
-          <div class="picker-filter" role="radiogroup" aria-label="ประเภทระบบ">
-            <button type="button" class="picker-filter-btn" data-audience="" role="radio" aria-checked="true">ทั้งหมด</button>
-            <button type="button" class="picker-filter-btn" data-audience="student" role="radio" aria-checked="false">นักศึกษา</button>
-            <button type="button" class="picker-filter-btn" data-audience="staff" role="radio" aria-checked="false">บุคลากร</button>
-          </div>
+          <button type="button" class="btn btn-secondary btn-icon picker-filter-toggle" id="filter-open-btn" aria-label="กรองระบบ" title="กรองระบบ" aria-haspopup="dialog"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"/></svg><span class="picker-filter-dot" id="filter-dot" hidden></span></button>
         </div>
       </div>
 
@@ -70,6 +66,38 @@
   </div>
 
 </div>
+
+<dialog class="modal" id="filter-modal" aria-labelledby="filter-modal-title">
+  <form method="dialog" class="modal-body" id="filter-form">
+    <div class="row-between">
+      <h2 class="modal-title" id="filter-modal-title">กรองระบบ</h2>
+      <button type="submit" value="cancel" class="modal-close" aria-label="ปิด">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <fieldset class="modal-fieldset">
+      <legend>ประเภทระบบ</legend>
+      <label class="filter-option">
+        <input type="radio" name="audience" value="" checked>
+        <span class="filter-option-text"><strong>ทั้งหมด</strong><span>แสดงทุกระบบ</span></span>
+      </label>
+      <label class="filter-option">
+        <input type="radio" name="audience" value="student">
+        <span class="filter-option-text"><strong>ระบบนักศึกษา</strong><span>ลงทะเบียนเรียน วีซ่า และระบบสำหรับนักศึกษา</span></span>
+      </label>
+      <label class="filter-option">
+        <input type="radio" name="audience" value="staff">
+        <span class="filter-option-text"><strong>ระบบบุคลากร</strong><span>งานเอกสาร ขอใช้รถ และระบบสำหรับบุคลากร</span></span>
+      </label>
+    </fieldset>
+
+    <div class="row" style="gap: 10px;">
+      <button type="submit" value="clear" class="btn btn-secondary" style="flex-grow: 1;">ล้างตัวกรอง</button>
+      <button type="submit" value="apply" class="btn btn-primary" style="flex-grow: 1;">ใช้ตัวกรอง</button>
+    </div>
+  </form>
+</dialog>
 
 <script type="module" src="assets/js/index.js"></script>
 </body>

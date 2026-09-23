@@ -122,6 +122,17 @@ input, textarea, select {
   min-width: 0;
 }
 
+/* Phones: tighten the top bar so logo, email, admin link and logout fit */
+@media (max-width: 560px) {
+  .topbar {
+    padding: 0 16px;
+  }
+  .topbar-left,
+  .topbar-right {
+    gap: 8px;
+  }
+}
+
 /* Long emails are cut with "…"; the full address shows on hover (title) */
 .user-email {
   font-size: 12.5px;
@@ -266,6 +277,13 @@ input, textarea, select {
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   background: var(--surface);
+}
+
+.btn-admin-link {
+  padding: 6px 12px;
+  font-size: 12px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .btn-logout {

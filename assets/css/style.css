@@ -446,7 +446,7 @@ input, textarea, select {
 @supports not selector(::-webkit-scrollbar) {
   .history-scroll {
     scrollbar-width: thin;
-    scrollbar-color: rgba(20, 20, 18, 0.22) transparent;
+    scrollbar-color: rgba(20, 20, 18, 0.35) rgba(20, 20, 18, 0.08);
   }
 }
 
@@ -456,11 +456,17 @@ input, textarea, select {
 
 .history-scroll::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgba(20, 20, 18, 0.22);
+  background: rgba(20, 20, 18, 0.35);
 }
 
+.history-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(20, 20, 18, 0.5);
+}
+
+/* visible full-length track so the scroll position/length reads at a glance */
 .history-scroll::-webkit-scrollbar-track {
-  background: transparent;
+  border-radius: 999px;
+  background: rgba(20, 20, 18, 0.08);
 }
 
 .history-scroll::-webkit-scrollbar-button {

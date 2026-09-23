@@ -1431,6 +1431,33 @@ table.data-table {
   gap: 6px;
 }
 
+/* status icon tile at the top of each stat card */
+.dash-stat-icon {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dash-stat-icon[data-status="pending"] {
+  background: var(--danger-soft);
+  color: var(--st-pending);
+}
+
+.dash-stat-icon[data-status="progress"] {
+  background: var(--warning-soft);
+  color: #B8741A;
+}
+
+.dash-stat-icon[data-status="resolved"] {
+  background: var(--success-soft);
+  color: var(--st-resolved);
+}
+
 .dash-label {
   display: flex;
   align-items: center;
@@ -1877,6 +1904,16 @@ table.data-table {
   }
   .dash-stat {
     padding: 14px;
+  }
+  .dash-stat-icon {
+    width: 34px;
+    height: 34px;
+    margin-bottom: 4px;
+    border-radius: 10px;
+  }
+  .dash-stat-icon svg {
+    width: 18px;
+    height: 18px;
   }
   .dash-card .dash-stat-value {
     font-size: 24px;

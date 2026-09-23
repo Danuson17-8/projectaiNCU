@@ -127,6 +127,13 @@ input, textarea, select {
   font-size: 15px;
 }
 
+/* On phones only the short name "ระบบแจ้งปัญหา" is shown */
+@media (max-width: 560px) {
+  .wordmark-long {
+    display: none;
+  }
+}
+
 .topbar-admin .wordmark {
   color: #FFFFFF;
 }

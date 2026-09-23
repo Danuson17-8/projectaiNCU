@@ -9,7 +9,7 @@ const chatInputRow = document.getElementById('chat-input-row');
 const statusPanel = document.getElementById('status-panel');
 const statusTicketId = document.getElementById('status-ticket-id');
 const statusBadge = document.getElementById('status-badge');
-const topbarTitle = document.getElementById('topbar-title');
+const topbarTitleLong = document.getElementById('topbar-title-long');
 
 const CANNED_DECLINE =
   'ขออภัยครับ ตอนนี้ระบบรับแจ้งได้เฉพาะปัญหาแรกที่แจ้งไปเท่านั้น หากมีเรื่องอื่นเพิ่มเติม รบกวนรอทีมงานติดต่อกลับตามหมายเลข ticket นี้ หรือแจ้งเป็นรายการใหม่ครับ';
@@ -59,7 +59,7 @@ async function runSystemMode(slug, userId) {
     return;
   }
 
-  topbarTitle.textContent = `ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย / ${system.name}`;
+  topbarTitleLong.textContent = `การใช้งานระบบมหาวิทยาลัย / ${system.name}`;
   appendRow('bot', `รับทราบครับ กรุณาอธิบายปัญหาที่พบเกี่ยวกับ "${system.name}" ได้เลยครับ`);
 
   let ticketCreated = false;
@@ -118,7 +118,7 @@ async function runTrackMode(ticketId) {
   }
 
   const systemName = row.systems ? row.systems.name : '';
-  topbarTitle.textContent = `ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย / ${systemName}`;
+  topbarTitleLong.textContent = `การใช้งานระบบมหาวิทยาลัย / ${systemName}`;
   showStatusPanel(row.id, row.status);
   appendRow('user', row.message);
   appendRow(

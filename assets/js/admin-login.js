@@ -19,7 +19,7 @@ async function isAdminSession(session) {
 async function redirectIfAlreadyAdmin() {
   const { data: { session } } = await supabase.auth.getSession();
   if (session && (await isAdminSession(session))) {
-    window.location.href = './systems.html';
+    window.location.href = './dashboard.html';
   }
 }
 
@@ -46,7 +46,7 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  window.location.href = './systems.html';
+  window.location.href = './dashboard.html';
 });
 
 redirectIfAlreadyAdmin();

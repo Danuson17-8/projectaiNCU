@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ระบบแจ้งปัญหาการใช้งานระบบมหาวิทยาลัย — Admin — Dashboard</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="admin-body">
+
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <div class="logo-mark">NCU</div>
+        <div class="sidebar-brand-text">
+          <span class="wordmark">ระบบแจ้งปัญหา<span class="wordmark-long">การใช้งานระบบมหาวิทยาลัย</span></span>
+          <span class="pill pill-dark">Admin</span>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <a class="admin-nav-item active" aria-current="page" href="dashboard.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></a>
+        <a class="admin-nav-item" href="systems.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg><span>Systems</span></a>
+        <a class="admin-nav-item" href="tickets.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg><span>Tickets</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a class="sidebar-link" href="../index.html">← มุมมอง user</a>
+        <button class="btn btn-secondary btn-icon btn-logout" id="logout-btn" aria-label="ออกจากระบบ" title="ออกจากระบบ"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg></button>
+      </div>
+    </aside>
+
+    <main class="admin-main dash">
+      <div class="dash-header">
+        <div>
+          <h1 class="dash-title">ภาพรวม</h1>
+          <p class="dash-subtitle" id="dash-updated">กำลังโหลดข้อมูล...</p>
+        </div>
+        <div class="dash-range" role="radiogroup" aria-label="ช่วงเวลา">
+          <button type="button" class="dash-range-btn" data-days="7" role="radio" aria-checked="false">7 วัน</button>
+          <button type="button" class="dash-range-btn" data-days="30" role="radio" aria-checked="true">30 วัน</button>
+          <button type="button" class="dash-range-btn" data-days="90" role="radio" aria-checked="false">90 วัน</button>
+          <button type="button" class="dash-range-btn" data-days="0" role="radio" aria-checked="false">ทั้งหมด</button>
+        </div>
+      </div>
+
+      <section class="dash-kpis" aria-label="ตัวเลขสรุป">
+        <article class="dash-card dash-hero">
+          <p class="dash-label">เรื่องที่แจ้งเข้ามา</p>
+          <p class="dash-hero-value" id="kpi-total">–</p>
+          <p class="dash-delta" id="kpi-delta"></p>
+          <div class="dash-meter">
+            <div class="dash-meter-head">
+              <span>แก้ไขแล้ว</span>
+              <span class="dash-meter-value" id="kpi-rate">–</span>
+            </div>
+            <div class="dash-meter-track"><div class="dash-meter-fill" id="kpi-rate-bar" style="width: 0%;"></div></div>
+          </div>
+        </article>
+        <article class="dash-card dash-stat">
+          <p class="dash-label"><span class="dash-dot" style="background: var(--st-pending);"></span>รอตรวจสอบ</p>
+          <p class="dash-stat-value" id="kpi-pending">–</p>
+          <p class="dash-stat-share" id="kpi-pending-share"></p>
+        </article>
+        <article class="dash-card dash-stat">
+          <p class="dash-label"><span class="dash-dot" style="background: var(--st-progress);"></span>กำลังดำเนินการ</p>
+          <p class="dash-stat-value" id="kpi-progress">–</p>
+          <p class="dash-stat-share" id="kpi-progress-share"></p>
+        </article>
+        <article class="dash-card dash-stat">
+          <p class="dash-label"><span class="dash-dot" style="background: var(--st-resolved);"></span>แก้ไขแล้ว</p>
+          <p class="dash-stat-value" id="kpi-resolved">–</p>
+          <p class="dash-stat-share" id="kpi-resolved-share"></p>
+        </article>
+      </section>
+
+      <section class="dash-card dash-panel">
+        <div class="dash-panel-head">
+          <div>
+            <h2 class="dash-panel-title">เรื่องที่แจ้งเข้ามา</h2>
+            <p class="dash-panel-sub" id="trend-sub">จำนวนต่อวัน</p>
+          </div>
+        </div>
+        <div class="dash-line" id="trend-chart" role="img" aria-label="กราฟจำนวนเรื่องที่แจ้งตามช่วงเวลา"></div>
+      </section>
+
+      <div class="dash-grid-2">
+        <section class="dash-card dash-panel">
+          <div class="dash-panel-head">
+            <div>
+              <h2 class="dash-panel-title">แยกตามระบบ</h2>
+              <p class="dash-panel-sub">จำนวนเรื่องของแต่ละระบบ แบ่งตามสถานะ</p>
+            </div>
+          </div>
+          <ul class="dash-legend" aria-label="คำอธิบายสี">
+            <li><span class="dash-dot" style="background: var(--st-pending);"></span>รอตรวจสอบ</li>
+            <li><span class="dash-dot" style="background: var(--st-progress);"></span>กำลังดำเนินการ</li>
+            <li><span class="dash-dot" style="background: var(--st-resolved);"></span>แก้ไขแล้ว</li>
+          </ul>
+          <div class="dash-bars" id="system-bars"></div>
+        </section>
+
+        <section class="dash-card dash-panel">
+          <div class="dash-panel-head">
+            <div>
+              <h2 class="dash-panel-title">ค้างนานที่สุด</h2>
+              <p class="dash-panel-sub">เรื่องที่ยังไม่แก้ไข ทุกช่วงเวลา</p>
+            </div>
+            <a class="dash-panel-link" href="tickets.html">ดูทั้งหมด</a>
+          </div>
+          <ol class="dash-aging" id="aging-list"></ol>
+        </section>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<div class="dash-tooltip" id="dash-tooltip" role="tooltip" hidden></div>
+
+<script type="module" src="../assets/js/admin-dashboard.js"></script>
+</body>
+</html>

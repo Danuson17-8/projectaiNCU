@@ -1431,11 +1431,17 @@ table.data-table {
   gap: 6px;
 }
 
-/* status icon tile at the top of each stat card */
+/* status icon tile with the status label beside it */
+.dash-stat-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
 .dash-stat-icon {
   width: 44px;
   height: 44px;
-  margin-bottom: 8px;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -1905,10 +1911,16 @@ table.data-table {
   .dash-stat {
     padding: 14px;
   }
+  /* cards are too narrow on phones for label beside icon */
+  .dash-stat-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
   .dash-stat-icon {
     width: 34px;
     height: 34px;
-    margin-bottom: 4px;
     border-radius: 10px;
   }
   .dash-stat-icon svg {
